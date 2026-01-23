@@ -134,6 +134,23 @@
                     <!-- 动态加载教程 -->
                 </div>
             </section>
+            <!-- 个人中心板块 -->
+            <section id="profile" class="view">
+                <h2>我的档案</h2>
+                <div class="profile-header card glass">
+                    <div class="profile-info">
+                        <div class="profile-avatar">S</div>
+                        <div class="profile-text">
+                            <h3>SuperAce</h3>
+                            <p>NTRP 4.0 • 胜率 85%</p>
+                        </div>
+                    </div>
+                    <button class="primary-btn share-btn" id="sharePosterBtn">
+                        <i class="fas fa-share-nodes"></i> 生成球星卡
+                    </button>
+                    <canvas id="posterCanvas" width="600" height="800" style="display:none;"></canvas>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -160,6 +177,33 @@
                 <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
             </div>
             <h3 id="videoTitle">视频标题</h3>
+        </div>
+    </div>
+
+    <!-- 约球弹窗 -->
+    <div id="inviteModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close-invite-modal close-modal">&times;</span>
+            <div class="invite-header">
+                <h3>向 <span id="inviteTargetName">Ta</span> 发起挑战</h3>
+            </div>
+            <div class="check-in-options">
+                <button class="type-btn active">约比赛</button>
+                <button class="type-btn">约拉球</button>
+            </div>
+            <textarea placeholder="你好，我看我们距离很近，水平也差不多，这周末有空约一场吗？" id="inviteMsg"></textarea>
+            <button class="primary-btn" id="sendInviteBtn">发送邀请</button>
+        </div>
+    </div>
+
+    <!-- 海报预览弹窗 -->
+    <div id="posterModal" class="modal">
+        <div class="modal-content glass" style="text-align: center; max-width: 500px;">
+            <span class="close-poster-modal close-modal">&times;</span>
+            <h3>您的专属球星卡</h3>
+            <img id="posterImg" src="" alt="球星卡"
+                style="width: 100%; border-radius: 12px; margin: 1rem 0; border: 1px solid var(--primary);">
+            <p style="color: var(--text-dim); font-size: 0.9rem;">长按图片保存，分享到朋友圈</p>
         </div>
     </div>
 

@@ -46,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const matchList = document.getElementById('matchList');
+    const inviteModal = document.getElementById('inviteModal');
+    const inviteTargetName = document.getElementById('inviteTargetName');
+    const closeInviteModal = document.querySelector('.close-invite-modal');
+    const sendInviteBtn = document.getElementById('sendInviteBtn');
+
     if (matchList) {
         mockMatches.forEach(m => {
             const card = document.createElement('div');
@@ -56,13 +61,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>${m.name}</h4>
                     <p>NTRP ${m.level} • 距离 ${m.dist}</p>
                 </div>
-                <div class="match-score">
-                    <span class="score-pct">${m.match}</span>
-                    <p>匹配度</p>
+                <div class="match-action">
+                    <button class="primary-btn match-btn-small" style="margin-top:0; padding: 8px 16px; font-size: 0.9rem;">发起挑战</button>
+                    <div class="match-score" style="text-align: right; font-size: 0.8rem; margin-top: 5px;">
+                        <span style="color:var(--primary); font-weight:bold;">${m.match}</span> 匹配度
+                    </div>
                 </div>
             `;
+
+            // 绑定约球点击事件
+            const btn = card.querySelector('button');
+            btn.onclick = () => {
+                inviteTargetName.innerText = m.name;
+                inviteModal.style.display = 'block';
+            };
+
             matchList.appendChild(card);
         });
+    }
+
+    // 约球弹窗逻辑
+    if (closeInviteModal) {
+        closeInviteModal.onclick = () => inviteModal.style.display = 'none';
+    }
+
+    if (sendInviteBtn) {
+        sendInviteBtn.onclick = () => {
+            alert('挑战书已通过短信发送给对方！');
+            inviteModal.style.display = 'none';
+        };
     }
 
     // --- 模拟教程数据 ---
@@ -132,7 +159,67 @@ document.addEventListener('DOMContentLoaded', () => {
             videoModal.style.display = 'none';
             videoPlayer.src = "";
         }
+        if (e.target == inviteModal) inviteModal.style.display = 'none';
+        if (e.target == document.getElementById('posterModal')) document.getElementById('posterModal').style.display = 'none';
     };
+
+    // --- 球星卡生成逻辑 (Canvas) ---
+    const sharePosterBtn = document.getElementById('sharePosterBtn');
+    const posterCanvas = document.getElementById('posterCanvas');
+    const posterModal = document.getElementById('posterModal');
+    const posterImg = document.getElementById('posterImg');
+    const closePosterModal = document.querySelector('.close-poster-modal');
+
+    if (sharePosterBtn && posterCanvas) {
+        sharePosterBtn.addEventListener('click', () => {
+            const ctx = posterCanvas.getContext('2d');
+
+            // 1. 绘制背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, 800);
+            gradient.addColorStop(0, '#111');
+            gradient.addColorStop(1, '#2D5A27'); // 网球绿
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 600, 800);
+
+            // 2. 绘制装饰圆环
+            ctx.beginPath();
+            ctx.arc(300, 250, 110, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(206, 255, 0, 0.2)';
+            ctx.lineWidth = 20;
+            ctx.stroke();
+
+            // 3. 绘制文字信息
+            ctx.fillStyle = '#CEFF00'; // 品牌黄
+            ctx.font = 'bold 80px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('NTRP 4.0', 300, 280);
+
+            ctx.fillStyle = '#fff';
+            ctx.font = '30px sans-serif';
+            ctx.fillText('SuperAce', 300, 400);
+
+            ctx.fillStyle = '#ccc';
+            ctx.font = '24px sans-serif';
+            ctx.fillText('累计胜率 85% • 击败全区 92% 球友', 300, 450);
+
+            // 4. 底部 Slogan
+            ctx.fillStyle = '#fff';
+            ctx.font = 'italic bold 40px sans-serif';
+            ctx.fillText('ACE MATCH', 300, 700);
+
+            ctx.font = '20px sans-serif';
+            ctx.fillText('不服来战', 300, 740);
+
+            // 5. 生成图片并弹窗
+            const dataUrl = posterCanvas.toDataURL('image/png');
+            posterImg.src = dataUrl;
+            posterModal.style.display = 'block';
+        });
+
+        if (closePosterModal) {
+            closePosterModal.onclick = () => posterModal.style.display = 'none';
+        }
+    }
 
     // --- 日历生成 logic (实时) ---
     const weekGrid = document.getElementById('weekGrid');
