@@ -430,3 +430,145 @@ textarea {
     margin-bottom: 1rem;
     resize: none;
 }
+
+/* 响应式调整 - 手机端 */
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+        /* 允许滚动 */
+    }
+
+    .app-container {
+        flex-direction: column;
+    }
+
+    /* 侧边栏转底部导航 */
+    .side-nav {
+        width: 100% !important;
+        height: 70px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        flex-direction: row !important;
+        padding: 5px 10px !important;
+        z-index: 1000;
+        justify-content: space-between;
+        align-items: center;
+        border-right: none;
+        border-top: 1px solid var(--glass-border);
+    }
+
+    .logo {
+        display: none;
+        /* 手机端隐藏Logo，节省空间 */
+    }
+
+    .nav-links {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        margin: 0;
+    }
+
+    .nav-links li {
+        flex-direction: column;
+        gap: 4px !important;
+        padding: 8px !important;
+        margin-bottom: 0 !important;
+        font-size: 0.7rem;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .nav-links li i {
+        font-size: 1.2rem;
+    }
+
+    .nav-links li span {
+        display: block;
+        /* 确保文字在图标下方 */
+    }
+
+    .nav-footer {
+        display: none;
+        /* 底部导航不放打卡按钮 */
+    }
+
+    /* 主内容区调整 */
+    .main-content {
+        padding: 1.5rem 1rem 100px 1rem;
+        /* 底部留出导航栏空间 */
+    }
+
+    .hero-header {
+        height: 200px;
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+        max-width: 80%;
+    }
+
+    /* 统计卡片调整 */
+    .stats-card {
+        order: -1;
+        /* 将统计放到最前面 */
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        /* 强制单列 */
+        gap: 1rem;
+    }
+
+    #levelValue {
+        font-size: 3rem;
+    }
+
+    /* 弹窗调整 */
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+        padding: 1.5rem;
+    }
+
+    /* 日历微调 */
+    .week-grid {
+        gap: 5px;
+    }
+
+    .day-num {
+        font-size: 1rem;
+    }
+
+    /* 手机端悬浮打卡按钮 */
+    .mobile-check-in {
+        display: flex;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: #000;
+        padding: 10px 15px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        box-shadow: 0 4px 15px var(--primary-glow);
+        z-index: 999;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+/* 非手机端隐藏悬浮按钮 */
+@media (min-width: 769px) {
+    .mobile-check-in {
+        display: none;
+    }
+}

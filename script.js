@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             const target = link.getAttribute('data-target');
-            
+
             // 更新导航激活状态
             navLinks.forEach(item => item.classList.remove('active'));
             link.classList.add('active');
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     levelSlider.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value).toFixed(1);
         levelValue.innerText = val;
-        
+
         // 更新等级标签
         if (val < 2.5) levelBadge.innerText = '初学者';
         else if (val < 4.5) levelBadge.innerText = '中级';
@@ -95,10 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 打卡弹窗逻辑 ---
     const checkInBtn = document.getElementById('checkInBtn');
+    const mobileCheckInBtn = document.getElementById('mobileCheckInBtn');
     const modal = document.getElementById('checkInModal');
     const closeModal = document.querySelector('.close-modal');
 
-    checkInBtn.onclick = () => modal.style.display = 'block';
+    const openModal = () => modal.style.display = 'block';
+
+    if (checkInBtn) checkInBtn.onclick = openModal;
+    if (mobileCheckInBtn) mobileCheckInBtn.onclick = openModal;
+
     closeModal.onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
 
