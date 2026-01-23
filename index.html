@@ -29,6 +29,7 @@
                 <li class="active" data-target="home"><i class="fas fa-home"></i><span>首页</span></li>
                 <li data-target="calendar"><i class="fas fa-calendar-alt"></i><span>空闲</span></li>
                 <li data-target="match"><i class="fas fa-users"></i><span>匹配</span></li>
+                <li data-target="courts"><i class="fas fa-map-location-dot"></i><span>场馆</span></li>
                 <li data-target="learn"><i class="fas fa-graduation-cap"></i><span>教程</span></li>
                 <li data-target="profile"><i class="fas fa-user"></i><span>我的</span></li>
             </ul>
@@ -120,6 +121,24 @@
                 </div>
             </section>
 
+            <!-- 场馆板块 -->
+            <section id="courts" class="view">
+                <h2>附近热门网球场</h2>
+                <div class="card glass map-card">
+                    <div id="amap-container" class="map-container">
+                        <!-- 地图将在这里渲染 -->
+                        <div class="map-placeholder">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <p>正在加载高德地图...</p>
+                            <small style="color:var(--text-dim)">需要配置 API Key 才能查看实时地图</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="court-list" id="courtList">
+                    <!-- 场馆列表 (API加载或兜底数据) -->
+                </div>
+            </section>
+
             <!-- 教程板块 -->
             <section id="learn" class="view">
                 <h2>网球学院</h2>
@@ -207,6 +226,12 @@
         </div>
     </div>
 
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: 'YOUR_SECURITY_CODE_HERE', // 请替换为你的高德 Web端 JS API 安全密钥
+        }
+    </script>
+    <script src="https://webapi.amap.com/loader/1.0.1/index.js"></script>
     <script src="script.js"></script>
 </body>
 

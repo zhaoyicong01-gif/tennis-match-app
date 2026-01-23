@@ -264,4 +264,96 @@ document.addEventListener('DOMContentLoaded', () => {
             weekGrid.appendChild(dayEl);
         }
     }
+
+    // --- 高德地图加载逻辑 ---
+    // 兜底数据（当Key未配置时显示）
+    const fallbackCourts = [
+        { name: "奥林匹克森林公园网球中心", address: "朝阳区科荟路33号", dist: "2.3km", rating: 4.8 },
+        { name: "国家网球中心 (钻石球场)", address: "朝阳区林萃路2号", dist: "3.1km", rating: 4.9 },
+        { name: "朝阳公园网球中心", address: "朝阳区朝阳公园南路1号", dist: "5.5km", rating: 4.6 },
+        { name: "通州运河网球场", address: "通州区运河公园内", dist: "12km", rating: 4.5 }
+    ];
+
+    const renderCourts = (list) => {
+        const courtList = document.getElementById('courtList');
+        if (!courtList) return;
+        courtList.innerHTML = '';
+        list.forEach(c => {
+            const item = document.createElement('div');
+            item.className = 'card glass court-item';
+            item.innerHTML = `
+                <i class="fas fa-map-pin" style="font-size: 1.2rem; color: var(--text-dim);"></i>
+                <div class="court-info">
+                    <h4>${c.name}</h4>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">${c.address || c.address || '暂无地址'} · ${c.dist || '未知距离'}</p>
+                </div>
+                <div class="court-score">
+                    ${c.rating || 4.5} <span style="font-size:0.8rem">分</span>
+                </div>
+            `;
+            courtList.appendChild(item);
+        });
+    };
+
+    // 尝试加载地图
+    if (window.AMapLoader) {
+        window.AMapLoader.load({
+            key: "YOUR_AMAP_KEY", // 你的 Key
+            version: "2.0",
+            plugins: ['AMap.PlaceSearch', 'AMap.Geolocation']
+        }).then((AMap) => {
+            const map = new AMap.Map('amap-container', {
+                viewMode: "3D",
+                zoom: 13,
+                mapStyle: 'amap://styles/dark', // 暗黑系地图风格
+                center: [116.397428, 39.90923] // 默认北京
+            });
+
+            // 定位当前位置
+            const geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true,
+                timeout: 10000,
+                buttonPosition: 'RB',
+                buttonOffset: new AMap.Pixel(10, 20),
+                zoomToAccuracy: true,
+            });
+            map.addControl(geolocation);
+
+            geolocation.getCurrentPosition((status, result) => {
+                if (status == 'complete') {
+                    // 搜索附近的网球场
+                    const placeSearch = new AMap.PlaceSearch({
+                        type: '网球场|体育馆',
+                        pageSize: 10,
+                        pageIndex: 1,
+                        map: map,
+                        autoFitView: true
+                    });
+
+                    placeSearch.searchNearBy('网球', result.position, 5000, (status, result) => {
+                        if (status === 'complete' && result.info === 'OK') {
+                            // 将高德数据转换为我们的格式
+                            const apiCourts = result.poiList.pois.map(p => ({
+                                name: p.name,
+                                address: p.address,
+                                dist: p.distance + 'm',
+                                rating: (p.shopinfo && p.shopinfo.score) ? p.shopinfo.score : 4.5
+                            }));
+                            renderCourts(apiCourts);
+                        } else {
+                            renderCourts(fallbackCourts);
+                        }
+                    });
+                } else {
+                    renderCourts(fallbackCourts); // 定位失败使用兜底
+                }
+            });
+
+        }).catch(e => {
+            console.log("AMap load failed, using fallback", e);
+            renderCourts(fallbackCourts);
+        });
+    } else {
+        renderCourts(fallbackCourts);
+    }
 });
