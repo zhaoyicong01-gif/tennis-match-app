@@ -431,6 +431,40 @@ textarea {
     resize: none;
 }
 
+.video-modal-content {
+    width: 80% !important;
+    max-width: 800px;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.close-video-modal {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-dim);
+}
+
+.close-video-modal:hover {
+    color: var(--primary);
+}
+
 /* 响应式调整 - 手机端 */
 @media (max-width: 768px) {
     body {

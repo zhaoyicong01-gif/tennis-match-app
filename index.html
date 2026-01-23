@@ -100,7 +100,7 @@
                 <div class="calendar-container card glass">
                     <div class="calendar-header">
                         <button class="icon-btn"><i class="fas fa-chevron-left"></i></button>
-                        <h3>2024年 10月</h3>
+                        <h3 id="calendarMonth">2024年 10月</h3>
                         <button class="icon-btn"><i class="fas fa-chevron-right"></i></button>
                     </div>
                     <div class="week-grid" id="weekGrid">
@@ -149,6 +149,17 @@
             </div>
             <textarea placeholder="写下今日的心得..."></textarea>
             <button class="primary-btn">提交打卡</button>
+        </div>
+    </div>
+
+    <!-- 视频播放弹窗 -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content glass video-modal-content">
+            <span class="close-video-modal">&times;</span>
+            <div class="video-container">
+                <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <h3 id="videoTitle">视频标题</h3>
         </div>
     </div>
 

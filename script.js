@@ -67,12 +67,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 模拟教程数据 ---
     const tutorials = [
-        { title: '费德勒同款正手教程', duration: '12:05', diff: '中级', img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a4ea13?auto=format&fit=crop&w=400&q=80' },
-        { title: '单反击球的秘密', duration: '08:45', diff: '高级', img: 'https://images.unsplash.com/photo-1595435934249-5df7ed86eb82?auto=format&fit=crop&w=400&q=80' },
-        { title: '网球发球基石：抛球', duration: '05:20', diff: '入门', img: 'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=400&q=80' }
+        { title: '费德勒同款正手教程', duration: '12:05', diff: '中级', img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a4ea13?auto=format&fit=crop&w=400&q=80', videoId: '0L-66yqX7Is' },
+        { title: '单反击球的秘密', duration: '08:45', diff: '高级', img: 'https://images.unsplash.com/photo-1595435934249-5df7ed86eb82?auto=format&fit=crop&w=400&q=80', videoId: 'eToezFhX8hM' },
+        { title: '网球发球基石：抛球', duration: '05:20', diff: '入门', img: 'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=400&q=80', videoId: 'HIKyY_Hk2n8' }
     ];
 
     const tutorialGrid = document.getElementById('tutorialGrid');
+    const videoModal = document.getElementById('videoModal');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoTitle = document.getElementById('videoTitle');
+    const closeVideoModal = document.querySelector('.close-video-modal');
+
     if (tutorialGrid) {
         tutorials.forEach(t => {
             const card = document.createElement('div');
@@ -89,8 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
+
+            card.addEventListener('click', () => {
+                videoTitle.innerText = t.title;
+                videoPlayer.src = `https://www.youtube.com/embed/${t.videoId}?autoplay=1`;
+                videoModal.style.display = 'block';
+            });
+
             tutorialGrid.appendChild(card);
         });
+    }
+
+    if (closeVideoModal) {
+        closeVideoModal.onclick = () => {
+            videoModal.style.display = 'none';
+            videoPlayer.src = ""; // 停止播放
+        };
     }
 
     // --- 打卡弹窗逻辑 ---
@@ -105,27 +124,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileCheckInBtn) mobileCheckInBtn.onclick = openModal;
 
     closeModal.onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
 
-    // --- 日历生成 logic ---
+    // 点击外部关闭弹窗
+    window.onclick = (e) => {
+        if (e.target == modal) modal.style.display = 'none';
+        if (e.target == videoModal) {
+            videoModal.style.display = 'none';
+            videoPlayer.src = "";
+        }
+    };
+
+    // --- 日历生成 logic (实时) ---
     const weekGrid = document.getElementById('weekGrid');
-    const days = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-    const currentDay = 3; // 假设今天是周四
+    const calendarMonth = document.getElementById('calendarMonth');
+    const now = new Date();
+
+    // 设置月份显示
+    const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+    if (calendarMonth) {
+        calendarMonth.innerText = `${now.getFullYear()}年 ${monthNames[now.getMonth()]}`;
+    }
 
     if (weekGrid) {
-        days.forEach((day, i) => {
+        const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+        // 获取本周的第一天（周一）
+        const firstDayOfWeek = new Date(now);
+        const diff = now.getDay() === 0 ? -6 : 1 - now.getDay();
+        firstDayOfWeek.setDate(now.getDate() + diff);
+
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(firstDayOfWeek);
+            date.setDate(firstDayOfWeek.getDate() + i);
+
+            const dayName = days[date.getDay()];
+            const dayNum = date.getDate();
+            const isToday = date.toDateString() === now.toDateString();
+
             const dayEl = document.createElement('div');
-            dayEl.className = `day-cell ${i === currentDay ? 'today' : ''}`;
+            dayEl.className = `day-cell ${isToday ? 'today' : ''}`;
             dayEl.innerHTML = `
-                <span class="day-name">${day}</span>
-                <span class="day-num">${20 + i}</span>
+                <span class="day-name">${dayName}</span>
+                <span class="day-num">${dayNum}</span>
             `;
-            // 随机模拟一些有空的时间点
-            if (i > currentDay) {
+
+            // 模拟未来几天的空闲状态
+            if (date > now) {
                 dayEl.classList.add('available');
                 dayEl.title = '点击设置空闲';
             }
+
             weekGrid.appendChild(dayEl);
-        });
+        }
     }
 });
