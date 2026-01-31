@@ -110,108 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- 模拟笔记数据 (小红书图文风) ---
-    const notes = [
-        {
-            title: '我的正手进化史 🎾 | 深度解析',
-            author: 'TennisPro_阿强',
-            likes: '1.2k',
-            img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a4bd13?auto=format&fit=crop&w=400&q=80',
-            content: `
-                <p>今天想和大家分享一下正手击球的三个核心进阶技巧！✨</p>
-                <div class="note-step">
-                    <b>1️⃣ 侧身蓄力 (Unit Turn)</b>
-                    <p>很多球友正手没有力量，核心原因是缺乏躯干转动。肩膀要先于球拍转动！</p>
-                </div>
-                <div class="note-step">
-                    <b>2️⃣ 击球点 (Contact Point)</b>
-                    <p>一定要保证在身体的前侧击球，手臂呈自然的直线伸展。核心力量才是真正的原动力。🦾</p>
-                </div>
-                <p>#网球教程 #正手训练 #网球日常 #TennisLife</p>
-            `
-        },
-        {
-            title: '单反真的优雅！送给女生的教学 🎀',
-            author: '网球少女Momo',
-            likes: '856',
-            img: 'https://images.unsplash.com/photo-1595435934249-5df7ed86eb82?auto=format&fit=crop&w=400&q=80',
-            content: `
-                <p>谁说单反难练？掌握这几点，你也可以打出优雅的单反击球！👗</p>
-                <div class="note-step">
-                    <b>🌟 肩关节锁定</b>
-                    <p>在挥拍瞬间，确保肩膀稳固，利用大臂带动小臂，像挥舞鞭子一样甩出，而不是生拉硬扯。</p>
-                </div>
-                <p>#女神网球 #单反教程 #高级感网球</p>
-            `
-        },
-        {
-            title: '发球不稳定的救星！抛球是关键 🚀',
-            author: '硬地战神',
-            likes: '2.3k',
-            img: 'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=400&q=80',
-            content: `
-                <p>如果你无法稳定地抛球，你的发球将永远不稳定。这里有个练习小窍门...👇</p>
-                <div class="note-step">
-                    <b>🎯 抛球练习法</b>
-                    <p>对着墙面或通过球筒练习，高度应略高于你球拍伸直后的最高点。保持手臂垂直向上。</p>
-                </div>
-                <p>#发球教学 #网球干货 #网球基本功</p>
-            `
-        }
-    ];
-
-    const tutorialGrid = document.getElementById('tutorialGrid');
-    const videoModal = document.getElementById('videoModal');
-    const videoPlayer = document.getElementById('videoPlayer'); // 实际上作为容器使用
-    if (tutorialGrid) {
-        notes.forEach(n => {
-            const card = document.createElement('div');
-            card.className = 'card glass note-card';
-            card.style.padding = '0';
-            card.style.overflow = 'hidden';
-            card.innerHTML = `
-                <div style="height: 180px; background: url('${n.img}') center/cover; position: relative;">
-                    <span class="like-badge"><i class="fas fa-heart"></i> ${n.likes}</span>
-                </div>
-                <div style="padding: 1rem;">
-                    <h4 style="margin-bottom: 0.8rem; font-size: 0.95rem; line-height: 1.4;">${n.title}</h4>
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-dim);">
-                        <div style="width: 20px; height: 20px; border-radius: 50%; background: var(--primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px;">
-                            ${n.author.charAt(0)}
-                        </div>
-                        <span>${n.author}</span>
-                    </div>
-                </div>
-            `;
-
-            card.addEventListener('click', () => {
-                const modalBody = document.getElementById('articleContentArea');
-                modalBody.innerHTML = `
-                    <div class="note-article">
-                        <img src="${n.img}" style="width: 100%; border-radius: 15px; margin-bottom: 1.5rem; border: 1px solid var(--glass-border);">
-                        <h2 style="color: white; margin-bottom: 1rem; font-size: 1.5rem;">${n.title}</h2>
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
-                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800;">
-                                ${n.author.charAt(0)}
-                            </div>
-                            <span style="color: var(--text-dim);">${n.author}</span>
-                        </div>
-                        <div class="article-text" style="color: #eee; line-height: 1.8; font-size: 1rem;">
-                            ${n.content}
-                        </div>
-                    </div>
-                `;
-                openGenericModal(videoModal);
-            });
-
-            tutorialGrid.appendChild(card);
-        });
-    }
-
-
-    if (closeVideoModal) {
-        closeVideoModal.onclick = () => closeGenericModal(videoModal);
-    }
 
     // --- 打卡功能逻辑 (持久化) ---
     const checkInBtn = document.getElementById('checkInBtn');
@@ -544,50 +442,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadMap = () => {
         if (window.mapInitialized) return;
-        const mapContainer = document.getElementById('amap-container');
 
         // 标记已尝试初始化
         window.mapInitialized = true;
 
-        // 如果已经通过 script 标签直接加载
         if (window.AMap && window.AMap.Map) {
             initAMap(window.AMap);
-        }
-        // 否则尝试使用 AMapLoader (如果你还保留了 loader 加载方式)
-        else if (window.AMapLoader) {
-            window.AMapLoader.load({
-                key: "de0c3f54bcda0d0dc814f2e264c378b0",
-                version: "2.0",
-                plugins: ['AMap.PlaceSearch', 'AMap.Geolocation']
-            }).then((AMap) => {
-                initAMap(AMap);
-            }).catch(e => {
-                console.error("AMap load failed:", e);
-                showMapPlaceholder(mapContainer, "地图连接超时", "正在为您展示精品预约球场");
-                renderCourts(fallbackCourts);
-            });
         } else {
-            showMapPlaceholder(mapContainer, "智能地图初始化中", "正在自动为您匹配附近场地");
-            renderCourts(fallbackCourts);
+            const mapContainer = document.getElementById('amap-container');
+            showMapPlaceholder(mapContainer, "正在等待地图资源", "请稍候，系统正在为您链接高德服务...");
+            // 如果5秒后还没加载出来，显示配置提示
+            setTimeout(() => {
+                if (!window.AMap) {
+                    showMapPlaceholder(mapContainer, "地图初始化超时", "请检查网络或确认 API Key 配置是否正确");
+                }
+            }, 5000);
         }
+    };
+
+    // 暴露给全局的回调函数
+    window.onAMapLoad = () => {
+        console.log("AMap loaded via callback");
+        loadMap();
     };
 
     const showMapPlaceholder = (container, title, subtitle) => {
         if (!container) return;
         container.innerHTML = `
             <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background: linear-gradient(135deg, rgba(206,255,0,0.05) 0%, rgba(255,255,255,0.02) 100%); border-radius:15px; color:var(--text-dim); text-align:center; padding:20px; border: 1px solid rgba(255,255,255,0.05);">
-                <i class="fas fa-map-marked-alt" style="font-size:3rem; margin-bottom:15px; color:var(--primary); opacity: 0.8;"></i>
+                <i class="fas fa-satellite-dish" style="font-size:3rem; margin-bottom:15px; color:var(--primary); opacity: 0.8;"></i>
                 <h3 style="color: white; margin-bottom: 8px;">${title}</h3>
                 <p style="font-size:0.85rem; opacity: 0.7;">${subtitle}</p>
                 <div style="margin-top: 20px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px;">
-                    PREVIEW MODE
+                    AMap JS API 2.0
                 </div>
             </div>
         `;
     };
 
-    // 手机端无需自动延迟加载，等待用户点击Tab触发
-    if (window.innerWidth > 768) {
-        setTimeout(loadMap, 1000);
-    }
+    // 尝试立刻加载（如果脚本已缓存）
+    setTimeout(loadMap, 500);
 });

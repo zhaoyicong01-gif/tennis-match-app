@@ -153,22 +153,6 @@
                     <p>寻找优质场馆，学习专业技术</p>
                 </div>
 
-                <!-- 笔记/图文部分 -->
-                <div class="academy-part mb-4">
-                    <div class="sub-header">
-                        <h3><i class="fas fa-bookmark"></i> 网球笔记</h3>
-                    </div>
-                    <div class="category-tabs">
-                        <span class="tab active">热门</span>
-                        <span class="tab">正手</span>
-                        <span class="tab">反手</span>
-                        <span class="tab">发球</span>
-                        <span class="tab">战术</span>
-                    </div>
-                    <div class="video-grid" id="tutorialGrid">
-                        <!-- 动态加载教程 -->
-                    </div>
-                </div>
 
                 <!-- 场馆部分 -->
                 <div class="courts-part">
@@ -276,9 +260,9 @@
         </div>
     </div>
 
-    <!-- 直接加载高德地图 JS API -->
+    <!-- 直接加载高德地图 JS API (增加回调保证初始化) -->
     <script type="text/javascript"
-        src="https://webapi.amap.com/maps?v=2.0&key=de0c3f54bcda0d0dc814f2e264c378b0&plugin=AMap.PlaceSearch,AMap.Geolocation"></script>
+        src="https://webapi.amap.com/maps?v=2.0&key=de0c3f54bcda0d0dc814f2e264c378b0&plugin=AMap.PlaceSearch,AMap.Geolocation&callback=onAMapLoad"></script>
     <script src="script.js"></script>
 </body>
 
