@@ -1044,19 +1044,23 @@ textarea {
         font-size: 0.75rem;
     }
 
-    /* 极致紧凑头部 */
+    /* 首页头部 - 恢复品牌感 */
     .hero-header {
-        height: 50px;
-        padding: 5px 15px;
-        margin-bottom: 0;
-        border-radius: 8px;
+        height: 85px;
+        padding: 12px 18px;
+        margin-bottom: 2px;
+        border-radius: 16px;
         flex-shrink: 0;
     }
 
     .hero-content h1 {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
         margin: 0;
         line-height: 1.2;
+    }
+
+    .hero-content span.highlight {
+        font-size: 1.4rem;
     }
 
     .hero-content p {
@@ -1067,87 +1071,99 @@ textarea {
     .dashboard-grid {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 10px;
         flex: 1;
+        /* 撑满剩余屏幕高度 */
         min-height: 0;
     }
 
     .card {
-        padding: 8px 12px !important;
-        flex: 1;
+        padding: 12px 15px !important;
         display: flex;
         flex-direction: column;
         justify-content: center;
         min-height: 0;
     }
 
+    /* 根据重要性分配权重：NTRP > 天气 > 贴士 */
+    .level-card {
+        flex: 2.5;
+        /* 最核心的部分 */
+    }
+
+    .weather-card {
+        flex: 2.2;
+        /* 重要的实时动态 */
+    }
+
+    .tip-card {
+        flex: 1.3;
+        /* 补充信息，占用最少高度 */
+    }
+
     .level-card h3 {
-        font-size: 0.8rem;
-        margin-bottom: 4px;
+        font-size: 0.9rem;
+        margin-bottom: 6px;
     }
 
     #levelValue {
-        font-size: 1.5rem !important;
-        /* 进一步缩小数字 */
+        font-size: 2.4rem !important;
+    }
+
+    .level-badge {
+        font-size: 0.75rem;
+        padding: 2px 8px;
     }
 
     .slider {
-        margin: 8px 0 !important;
+        margin: 12px 0 !important;
     }
 
     .slider-hint {
-        font-size: 0.6rem !important;
-        margin-top: 2px;
-        line-height: 1.2;
-    }
-
-    /* 天气看板极度压缩 */
-    .weather-card {
-        padding: 8px 12px !important;
-    }
-
-    .weather-main {
-        margin-bottom: 4px;
-    }
-
-    .weather-temp {
-        font-size: 1.2rem;
-        gap: 6px;
-    }
-
-    .index-score {
-        font-size: 1.2rem;
-    }
-
-    .weather-advice {
-        font-size: 0.7rem;
-        margin-bottom: 2px;
-        padding-left: 6px;
-    }
-
-    .weather-details {
-        font-size: 0.6rem;
-        gap: 8px;
-    }
-
-    /* 进阶秘籍极度压缩 */
-    .tip-card {
-        padding: 8px 12px !important;
-    }
-
-    .tip-header {
-        font-size: 0.75rem;
-        margin-bottom: 4px;
-    }
-
-    #dailyTip {
-        font-size: 0.75rem;
+        font-size: 0.65rem !important;
+        margin-top: 5px;
         line-height: 1.3;
     }
 
+    /* 天气看板内部间距优化 */
+    .weather-main {
+        margin-bottom: 8px;
+    }
+
+    .weather-temp {
+        font-size: 1.6rem;
+        gap: 8px;
+    }
+
+    .index-score {
+        font-size: 1.6rem;
+    }
+
+    .weather-advice {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+        padding-left: 8px;
+    }
+
+    .weather-details {
+        font-size: 0.75rem;
+        gap: 12px;
+    }
+
+    /* 进阶秘籍内部间距微调 */
+    .tip-header {
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+
+    #dailyTip {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
     #dailyTip::before {
-        font-size: 1.2rem;
-        top: -8px;
+        font-size: 1.4rem;
+        top: -10px;
     }
 
     /* 约球页区域 */
