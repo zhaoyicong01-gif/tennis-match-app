@@ -504,29 +504,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             };
 
+            // 立即尝试加载一个默认城市（如北京），作为兜底
+            updateWeatherUI('北京市');
+
             // 获取位置并搜索
+            console.log('正在请求位置权限...');
             geolocation.getCurrentPosition((status, result) => {
-                const searchPos = (status === 'complete') ? result.position : map.getCenter();
-                const city = (status === 'complete') ? (result.addressComponent.city || result.addressComponent.province) : '北京市';
+                console.log('位置请求返回状态:', status);
+                if (status === 'complete' && result.addressComponent) {
+                    const city = result.addressComponent.city || result.addressComponent.province || '北京市';
+                    console.log('定位成功:', city);
+                    updateWeatherUI(city);
+                    const searchPos = result.position;
 
-                updateWeatherUI(city);
-
-                if (status !== 'complete') console.warn('定位失败，由中心点搜索');
-
-                placeSearch.searchNearBy('网球', searchPos, 10000, (s, r) => {
-                    if (s === 'complete' && r.info === 'OK') {
-                        const apiCourts = r.poiList.pois.map(p => ({
-                            name: p.name,
-                            address: p.address,
-                            dist: p.distance ? (p.distance + 'm') : '距离未知',
-                            rating: (p.shopinfo && p.shopinfo.score) ? p.shopinfo.score : 4.5,
-                            location: p.location
-                        }));
-                        renderCourts(apiCourts);
-                    } else {
-                        renderCourts(fallbackCourts);
-                    }
-                });
+                    placeSearch.searchNearBy('网球', searchPos, 10000, (s, r) => {
+                        if (s === 'complete' && r.info === 'OK') {
+                            const apiCourts = r.poiList.pois.map(p => ({
+                                name: p.name,
+                                address: p.address,
+                                dist: p.distance ? (p.distance + 'm') : '距离未知',
+                                rating: (p.shopinfo && p.shopinfo.score) ? p.shopinfo.score : 4.5,
+                                location: p.location
+                            }));
+                            renderCourts(apiCourts);
+                        } else {
+                            renderCourts(fallbackCourts);
+                        }
+                    });
+                } else {
+                    console.warn('定位未成功，继续使用默认城市。原因:', result ? result.message : '未知');
+                    renderCourts(fallbackCourts);
+                }
             });
         });
     };
