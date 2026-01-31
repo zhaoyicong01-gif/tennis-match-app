@@ -830,14 +830,13 @@ textarea {
 /* 响应式调整 - 手机端 (严格一屏模式) */
 @media (max-width: 768px) {
     body {
-        overflow: hidden;
-        height: 100dvh;
+        overflow: auto;
+        height: auto;
     }
 
     .app-container {
         flex-direction: column;
-        height: 100%;
-        overflow: hidden;
+        height: auto;
     }
 
     .side-nav {
@@ -891,15 +890,27 @@ textarea {
     }
 
     .main-content {
-        padding: calc(15px + env(safe-area-inset-top)) 15px calc(10px + env(safe-area-inset-bottom)) 15px;
-        height: calc(100dvh - (60px + env(safe-area-inset-bottom)));
-        overflow: hidden;
-        /* 严格一屏，禁止溢出滚动 */
-        display: flex;
+        padding: calc(15px + env(safe-area-inset-top)) 15px calc(100px + env(safe-area-inset-bottom)) 15px;
+        min-height: 100dvh;
+        overflow-y: visible;
+        display: block;
+    }
+
+    /* 视图切换：解决所有页面都能看到档案的 Bug */
+    .view {
+        display: none !important;
+    }
+
+    .view.visible {
+        display: block !important;
+        animation: fadeIn 0.3s ease;
+    }
+
+    /* 首页区域 */
+    .view#home.visible {
+        display: flex !important;
         flex-direction: column;
-        justify-content: space-between;
-        /* 关键：均匀分布内容填充一屏 */
-        gap: 15px;
+        gap: 20px;
     }
 
     /* 浓缩页面头部 */
@@ -941,21 +952,15 @@ textarea {
     .dashboard-grid {
         grid-template-columns: 1fr;
         gap: 15px;
-        flex: 1;
-        /* 让网格占据剩余大部分空间 */
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
         padding-bottom: 20px;
     }
 
     .card {
-        padding: 24px !important;
-        flex: 1;
-        /* 卡片自适应拉伸 */
+        padding: 20px !important;
         display: flex;
         flex-direction: column;
-        justify-content: center;
     }
 
     .level-card h3 {
@@ -977,12 +982,11 @@ textarea {
         margin-top: 8px;
     }
 
-    /* 约球页扩充 */
-    .match-part {
-        display: flex;
+    /* 约球页区域 */
+    .view#match.visible {
+        display: flex !important;
         flex-direction: column;
-        height: 100%;
-        justify-content: space-between;
+        gap: 15px;
     }
 
     .status-card {
@@ -1002,16 +1006,13 @@ textarea {
     }
 
     .match-list {
-        flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
         gap: 12px !important;
     }
 
     .match-card {
-        padding: 20px !important;
-        flex: 1;
+        padding: 15px !important;
         display: flex;
         align-items: center;
     }
@@ -1025,12 +1026,11 @@ textarea {
         padding: 2px 8px !important;
     }
 
-    /* 找场页扩充 */
-    .courts-part {
-        display: flex;
+    /* 找场页区域 */
+    .view#courts.visible {
+        display: flex !important;
         flex-direction: column;
-        height: 100%;
-        justify-content: space-between;
+        gap: 15px;
     }
 
     .map-card {
@@ -1041,11 +1041,9 @@ textarea {
     }
 
     .court-item {
-        padding: 22px !important;
-        flex: 1;
+        padding: 18px !important;
         display: flex;
         align-items: center;
-        margin-bottom: 0 !important;
         border-bottom: 1px solid var(--glass-border);
     }
 
@@ -1053,13 +1051,12 @@ textarea {
         font-size: 1.1rem !important;
     }
 
-    /* 个人中心扩充 */
-    #profile {
-        display: flex;
+    /* 个人中心页区域 */
+    .view#profile.visible {
+        display: flex !important;
         flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-        padding-bottom: 20px;
+        gap: 15px;
+        padding-bottom: 40px;
     }
 
     .profile-header {
@@ -1081,10 +1078,8 @@ textarea {
     }
 
     .profile-details {
-        flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: center;
     }
 
     .settings-list li {

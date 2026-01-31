@@ -66,22 +66,6 @@
                     </div>
 
 
-                    <!-- 统计数据 -->
-                    <div class="card glass stats-card">
-                        <div class="stat-item">
-                            <span class="stat-num">24</span>
-                            <span class="stat-label">总场次</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-num">85%</span>
-                            <span class="stat-label">胜率</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-num" id="checkInDaysDisplay">12</span>
-                            <span class="stat-label">打卡天数</span>
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <!-- 约球板块 (合并了日历和匹配) -->
@@ -197,6 +181,26 @@
                 </div>
 
                 <div class="profile-details grid shadow-sm">
+                    <!-- 统计数据 (从首页移来) -->
+                    <div class="card glass stats-card"
+                        style="display: flex; justify-content: space-around; margin-bottom: 1.5rem; text-align: center;">
+                        <div class="stat-item">
+                            <span class="stat-num"
+                                style="display: block; font-size: 1.5rem; color: var(--primary); font-weight: 800;">24</span>
+                            <span class="stat-label" style="font-size: 0.8rem; color: var(--text-dim);">总场次</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-num"
+                                style="display: block; font-size: 1.5rem; color: var(--primary); font-weight: 800;">85%</span>
+                            <span class="stat-label" style="font-size: 0.8rem; color: var(--text-dim);">胜率</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-num" id="checkInDaysDisplay"
+                                style="display: block; font-size: 1.5rem; color: var(--primary); font-weight: 800;">12</span>
+                            <span class="stat-label" style="font-size: 0.8rem; color: var(--text-dim);">打卡天数</span>
+                        </div>
+                    </div>
+
                     <div class="card glass">
                         <h4>基本设置</h4>
                         <ul class="settings-list">
