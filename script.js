@@ -52,26 +52,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const levelDesc = document.getElementById('levelDesc');
 
     const ntrpData = {
-        1.0: ["新人", "刚接触网球，正在学习握拍与基础动作"],
-        1.5: ["入门", "能击球，但挥拍不完整且缺乏方向控制"],
-        2.0: ["初学", "能慢速对拉，了解基本规则，脚步还在完善"],
-        2.5: ["初级", "正手开始稳定，能尝试简单的底线对攻"],
-        3.0: ["中级", "能在稳定对拉中控制方向，具备各种基础击球"],
-        3.5: ["中强", "击球有力量感，二发开始稳定，具备网前意识"],
-        4.0: ["中顶", "能控制深度与力度，具备可靠的二发与实战策略"],
-        4.5: ["高级", "能运用力量与旋转作为武器，具备明显的技术特长"],
-        5.0: ["精英", "能在高强度对抗中根据对手弱点实时调整战术"],
-        5.5: ["准职业", "在省级或国家级业余比赛中处于顶尖水平"],
-        6.0: ["职业", "现役或前职业球员"]
+        "1.0": ["新人", "刚接触网球，正在学习握拍与基础动作"],
+        "1.5": ["入门", "能击球，但挥拍不完整且缺乏方向控制"],
+        "2.0": ["初学", "能慢速对拉，了解基本规则，脚步还在完善"],
+        "2.5": ["初级", "正手开始稳定，能尝试简单的底线对攻"],
+        "3.0": ["中级", "能在稳定对拉中控制方向，具备各种基础击球"],
+        "3.5": ["中强", "击球有力量感，二发开始稳定，具备网前意识"],
+        "4.0": ["中顶", "能控制深度与力度，具备可靠的二发与实战策略"],
+        "4.5": ["高级", "能运用力量与旋转作为武器，具备明显的技术特长"],
+        "5.0": ["精英", "能在高强度对抗中根据对手弱点实时调整战术"],
+        "5.5": ["准职业", "在省级或国家级业余比赛中处于顶尖水平"],
+        "6.0": ["职业", "现役或前职业球员"],
+        "6.5": ["职业巅峰", "在国际职业巡回赛中具备竞争力"],
+        "7.0": ["大师", "世界顶级职业选手"]
+    };
+
+    const updateLevelDisplay = (val) => {
+        val = parseFloat(val).toFixed(1);
+        levelValue.innerText = val;
+        const [badge, desc] = ntrpData[val] || ["中级", "实力选手"];
+        levelBadge.innerText = badge;
+        if (levelDesc) levelDesc.innerText = `“${desc}”`;
     };
 
     if (levelSlider) {
+        // 初始化显示
+        updateLevelDisplay(levelSlider.value);
+
         levelSlider.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value).toFixed(1);
-            levelValue.innerText = val;
-            const [badge, desc] = ntrpData[val] || ["中级", ""];
-            levelBadge.innerText = badge;
-            if (levelDesc) levelDesc.innerText = `“${desc}”`;
+            updateLevelDisplay(e.target.value);
             if (navigator.vibrate) navigator.vibrate(5);
         });
     }
