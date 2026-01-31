@@ -1014,7 +1014,7 @@ textarea {
     .view#home.visible {
         display: flex !important;
         flex-direction: column;
-        gap: 20px;
+        gap: 12px;
     }
 
     /* 浓缩页面头部 */
@@ -1032,19 +1032,17 @@ textarea {
         font-size: 0.75rem;
     }
 
-    /* 首页卡片增加高度以填充视觉 */
+    /* 首页卡片压缩 */
     .hero-header {
-        height: 180px;
-        /* 增加高度以撑满空间 */
-        padding: 24px;
-        margin-bottom: 5px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
+        height: 120px;
+        /* 大幅压缩头部高度 */
+        padding: 16px;
+        margin-bottom: 0;
+        border-radius: 16px;
     }
 
     .hero-content h1 {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
         margin: 0;
     }
 
@@ -1055,35 +1053,52 @@ textarea {
 
     .dashboard-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 20px;
+        gap: 10px;
     }
 
     .card {
-        padding: 20px !important;
-        display: flex;
-        flex-direction: column;
+        padding: 15px !important;
     }
 
     .level-card h3 {
-        font-size: 1.1rem;
-        margin-bottom: 12px;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
     }
 
     #levelValue {
-        font-size: 3rem !important;
-    }
-
-    .level-badge {
-        font-size: 0.7rem;
-        padding: 2px 8px;
+        font-size: 2.2rem !important;
     }
 
     .slider-hint {
-        font-size: 0.7rem !important;
-        margin-top: 8px;
+        font-size: 0.65rem !important;
+        margin-top: 5px;
+    }
+
+    /* 天气与贴士卡片压缩 */
+    .weather-main {
+        margin-bottom: 0.5rem;
+    }
+
+    .weather-temp {
+        font-size: 1.4rem;
+    }
+
+    .index-score {
+        font-size: 1.4rem;
+    }
+
+    .weather-advice {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .tip-header {
+        margin-bottom: 5px;
+        font-size: 0.8rem;
+    }
+
+    #dailyTip {
+        font-size: 0.85rem;
     }
 
     /* 约球页区域 */
