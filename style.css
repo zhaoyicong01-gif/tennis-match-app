@@ -994,11 +994,11 @@ textarea {
     }
 
     .main-content {
-        padding: calc(15px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-inset-bottom)) 15px;
-        /* 适当保留导航空间，但不留冗余空白 */
-        min-height: 100dvh;
-        overflow-y: visible;
-        display: block;
+        padding: env(safe-area-inset-top) 12px calc(70px + env(safe-area-inset-bottom)) 12px;
+        height: 100dvh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     /* 视图切换：解决所有页面都能看到档案的 Bug */
@@ -1011,13 +1011,22 @@ textarea {
         animation: fadeIn 0.3s ease;
     }
 
-    /* 首页区域 - 布局重构 */
+    /* 首页区域 - 强制对齐顶部 */
     .view#home.visible {
         display: flex !important;
         flex-direction: column;
-        gap: 10px;
-        /* 合理间距 */
-        height: auto;
+        height: 100%;
+        gap: 6px;
+        overflow: hidden;
+    }
+
+    /* 允许滚动的视图 */
+    .view#match,
+    .view#courts,
+    .view#profile {
+        height: 100%;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
     }
 
     /* 浓缩页面头部 */
@@ -1035,13 +1044,12 @@ textarea {
         font-size: 0.75rem;
     }
 
-    /* 首页头部再压缩 */
+    /* 极致紧凑头部 */
     .hero-header {
-        height: 70px;
-        /* 极简高度 */
-        padding: 8px 15px;
+        height: 50px;
+        padding: 5px 15px;
         margin-bottom: 0;
-        border-radius: 12px;
+        border-radius: 8px;
         flex-shrink: 0;
     }
 
@@ -1059,14 +1067,18 @@ textarea {
     .dashboard-grid {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        /* 紧凑布局 */
+        gap: 6px;
+        flex: 1;
+        min-height: 0;
     }
 
     .card {
-        padding: 10px 15px !important;
+        padding: 8px 12px !important;
+        flex: 1;
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        min-height: 0;
     }
 
     .level-card h3 {
@@ -1075,7 +1087,8 @@ textarea {
     }
 
     #levelValue {
-        font-size: 1.8rem !important;
+        font-size: 1.5rem !important;
+        /* 进一步缩小数字 */
     }
 
     .slider {
