@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- 弹窗管理助手 ---
+    const openGenericModal = (modalEl) => {
+        if (!modalEl) return;
+        modalEl.style.display = 'block';
+        document.body.classList.add('modal-open');
+    };
+
+    const closeGenericModal = (modalEl) => {
+        if (!modalEl) return;
+        modalEl.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    };
+
     // --- 导航逻辑 ---
     const navLinks = document.querySelectorAll('.nav-links li');
     const views = document.querySelectorAll('.view');
@@ -78,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = card.querySelector('button');
             btn.onclick = () => {
                 inviteTargetName.innerText = m.name;
-                inviteModal.style.display = 'block';
+                openGenericModal(inviteModal);
             };
 
             matchList.appendChild(card);
@@ -87,13 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 约球弹窗逻辑
     if (closeInviteModal) {
-        closeInviteModal.onclick = () => inviteModal.style.display = 'none';
+        closeInviteModal.onclick = () => closeGenericModal(inviteModal);
     }
 
     if (sendInviteBtn) {
         sendInviteBtn.onclick = () => {
             alert('挑战书已通过短信发送给对方！');
-            inviteModal.style.display = 'none';
+            closeGenericModal(inviteModal);
         };
     }
 
@@ -188,17 +201,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
-                videoModal.style.display = 'block';
+                openGenericModal(videoModal);
             });
 
             tutorialGrid.appendChild(card);
         });
     }
 
+
     if (closeVideoModal) {
-        closeVideoModal.onclick = () => {
-            videoModal.style.display = 'none';
-        };
+        closeVideoModal.onclick = () => closeGenericModal(videoModal);
     }
 
     // --- 打卡功能逻辑 (持久化) ---
@@ -220,13 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     updateStats();
 
-    const openModal = () => modal.style.display = 'block';
-
-    if (checkInBtn) checkInBtn.onclick = openModal;
-    if (mobileCheckInBtn) mobileCheckInBtn.onclick = openModal;
+    if (checkInBtn) checkInBtn.onclick = () => openGenericModal(modal);
+    if (mobileCheckInBtn) mobileCheckInBtn.onclick = () => openGenericModal(modal);
 
     if (closeModal) {
-        closeModal.onclick = () => modal.style.display = 'none';
+        closeModal.onclick = () => closeGenericModal(modal);
     }
 
     // 类型切换
@@ -255,19 +265,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // 更新 UI
             updateStats();
 
-            // 反馈并关闭
-            alert(`打卡成功！您已累计训练 ${checkInData.length} 天。`);
             checkInMessage.value = '';
-            modal.style.display = 'none';
+            closeGenericModal(modal);
         };
     }
 
     // 点击外部关闭弹窗
     window.onclick = (e) => {
-        if (e.target == modal) modal.style.display = 'none';
-        if (e.target == videoModal) videoModal.style.display = 'none';
-        if (e.target == inviteModal) inviteModal.style.display = 'none';
-        if (e.target == document.getElementById('posterModal')) document.getElementById('posterModal').style.display = 'none';
+        if (e.target == modal || e.target == videoModal || e.target == inviteModal || e.target == posterModal) {
+            closeGenericModal(modal);
+            closeGenericModal(videoModal);
+            closeGenericModal(inviteModal);
+            closeGenericModal(posterModal);
+        }
     };
 
     // --- 球星卡生成逻辑 (Canvas) ---
@@ -318,14 +328,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fillText('不服来战', 300, 740);
 
             // 5. 生成图片并弹窗
-            const dataUrl = posterCanvas.toDataURL('image/png');
-            posterImg.src = dataUrl;
-            posterModal.style.display = 'block';
+            posterImg.src = posterCanvas.toDataURL();
+            openGenericModal(posterModal);
         });
+    }
 
-        if (closePosterModal) {
-            closePosterModal.onclick = () => posterModal.style.display = 'none';
-        }
+    if (closePosterModal) {
+        closePosterModal.onclick = () => closeGenericModal(posterModal);
     }
 
     // --- 日历生成 logic (实时 + 精确到小时) ---
