@@ -35,7 +35,7 @@
             <ul class="nav-links">
                 <li class="active" data-target="home"><i class="fas fa-home"></i><span>首页</span></li>
                 <li data-target="match"><i class="fas fa-users"></i><span>约球</span></li>
-                <li data-target="explore"><i class="fas fa-compass"></i><span>发现</span></li>
+                <li data-target="courts"><i class="fas fa-map-location-dot"></i><span>找场</span></li>
                 <li data-target="profile"><i class="fas fa-user"></i><span>我的</span></li>
             </ul>
             <!-- 原侧边栏打卡按钮已移除，改为全局右上角悬浮 -->
@@ -55,27 +55,16 @@
                 <div class="dashboard-grid">
                     <!-- 我的等级 -->
                     <div class="card glass level-card">
-                        <h3>我的 NTRP 等级</h3>
+                        <h3>我的 NTRP 等级 <i class="far fa-question-circle"
+                                style="font-size: 0.9rem; cursor: pointer;"></i></h3>
                         <div class="level-display">
                             <span id="levelValue">4.0</span>
-                            <div class="level-badge">中级</div>
+                            <div class="level-badge">中级巅峰</div>
                         </div>
                         <input type="range" min="1.0" max="7.0" step="0.5" value="4.0" class="slider" id="levelSlider">
-                        <p class="slider-hint">拖动以更新您的水平评定</p>
+                        <p id="levelDesc" class="slider-hint">“能控制深度和方向，具备可靠的二发”</p>
                     </div>
 
-                    <!-- 今日空闲 -->
-                    <div class="card glass status-card">
-                        <h3>今日状态</h3>
-                        <div class="status-toggle">
-                            <span>空闲中</span>
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                        <p>当前有 12 位球友在寻找 4.0 级别的对手</p>
-                    </div>
 
                     <!-- 统计数据 -->
                     <div class="card glass stats-card">
@@ -135,6 +124,19 @@
                     </div>
 
                     <!-- 推荐球友部分 -->
+                    <!-- 球约发布 (从首页移动到此处) -->
+                    <div class="card glass status-card mb-4" style="margin-bottom: 1.5rem;">
+                        <div class="status-header">
+                            <h3>发布今日球约</h3>
+                            <div class="pulse-icon"></div>
+                        </div>
+                        <div class="match-post-actions">
+                            <button class="action-tag active">有场求Pick</button>
+                            <button class="action-tag">求被带走</button>
+                        </div>
+                        <p style="font-size: 0.85rem; margin-top: 10px; color: var(--text-dim);">让方圆 10km 的球友看到您的动向</p>
+                    </div>
+
                     <div class="match-part">
                         <div class="sub-header">
                             <h3><i class="fas fa-user-check"></i> 为你推荐的球友</h3>
@@ -146,11 +148,11 @@
                 </div>
             </section>
 
-            <!-- 发现板块 (合并了场馆和学院) -->
-            <section id="explore" class="view">
+            <!-- 找场板块 -->
+            <section id="courts" class="view">
                 <div class="section-header">
-                    <h2>探索网球世界</h2>
-                    <p>寻找优质场馆，学习专业技术</p>
+                    <h2>搜索网球场</h2>
+                    <p>一键开启导航，寻找离你最近的场地</p>
                 </div>
 
 

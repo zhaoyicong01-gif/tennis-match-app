@@ -1,3 +1,9 @@
+// 全局 AMap 回调，必须在 DOMContentLoaded 之外定义以确保脚本加载时能找到
+window.onAMapLoad = () => {
+    console.log("AMap Global Callback Triggered");
+    if (window.loadMapInstance) window.loadMapInstance();
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- 弹窗管理助手 ---
     const openGenericModal = (modalEl) => {
@@ -32,27 +38,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // 懒加载地图：只有进入发现页才加载
-            if (target === 'explore' && !window.mapInitialized) {
+            // 懒加载地图：只有进入找场页才加载
+            if (target === 'courts' && !window.mapInitialized) {
                 setTimeout(loadMap, 300);
             }
         });
     });
 
-    // --- 等级滑动逻辑 ---
+    // --- 等级滑动逻辑 (NTRP 2024 标准版) ---
     const levelSlider = document.getElementById('levelSlider');
     const levelValue = document.getElementById('levelValue');
     const levelBadge = document.querySelector('.level-badge');
+    const levelDesc = document.getElementById('levelDesc');
 
-    levelSlider.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value).toFixed(1);
-        levelValue.innerText = val;
+    const ntrpData = {
+        1.0: ["新人", "刚接触网球，正在学习握拍与基础动作"],
+        1.5: ["入门", "能击球，但挥拍不完整且缺乏方向控制"],
+        2.0: ["初学", "能慢速对拉，了解基本规则，脚步还在完善"],
+        2.5: ["初级", "正手开始稳定，能尝试简单的底线对攻"],
+        3.0: ["中级", "能在稳定对拉中控制方向，具备各种基础击球"],
+        3.5: ["中强", "击球有力量感，二发开始稳定，具备网前意识"],
+        4.0: ["中顶", "能控制深度与力度，具备可靠的二发与实战策略"],
+        4.5: ["高级", "能运用力量与旋转作为武器，具备明显的技术特长"],
+        5.0: ["精英", "能在高强度对抗中根据对手弱点实时调整战术"],
+        5.5: ["准职业", "在省级或国家级业余比赛中处于顶尖水平"],
+        6.0: ["职业", "现役或前职业球员"]
+    };
 
-        // 更新等级标签
-        if (val < 2.5) levelBadge.innerText = '初学者';
-        else if (val < 4.5) levelBadge.innerText = '中级';
-        else if (val < 6.0) levelBadge.innerText = '高级';
-        else levelBadge.innerText = '专业';
+    if (levelSlider) {
+        levelSlider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value).toFixed(1);
+            levelValue.innerText = val;
+            const [badge, desc] = ntrpData[val] || ["中级", ""];
+            levelBadge.innerText = badge;
+            if (levelDesc) levelDesc.innerText = `“${desc}”`;
+            if (navigator.vibrate) navigator.vibrate(5);
+        });
+    }
+
+    // --- 发布球约状态切换 ---
+    const actionTags = document.querySelectorAll('.action-tag');
+    actionTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            actionTags.forEach(t => t.classList.remove('active'));
+            tag.classList.add('active');
+            if (navigator.vibrate) navigator.vibrate(10);
+        });
     });
 
     // --- 模拟球友数据 ---
@@ -396,52 +427,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const map = new AMap.Map('amap-container', {
             viewMode: "3D",
-            zoom: 13,
+            zoom: 12,
             mapStyle: 'amap://styles/dark',
-            center: [116.397428, 39.90923]
+            center: [116.397428, 39.90923] // 默认中心
         });
 
-        const geolocation = new AMap.Geolocation({
-            enableHighAccuracy: true,
-            timeout: 10000,
-            buttonPosition: 'RB',
-            buttonOffset: new AMap.Pixel(10, 20),
-            zoomToAccuracy: true,
-        });
-        map.addControl(geolocation);
+        // 加载插件
+        AMap.plugin(['AMap.Geolocation', 'AMap.PlaceSearch'], function () {
+            const geolocation = new AMap.Geolocation({
+                enableHighAccuracy: true,
+                timeout: 5000,
+                buttonPosition: 'RB',
+                zoomToAccuracy: true,
+            });
+            map.addControl(geolocation);
 
-        geolocation.getCurrentPosition((status, result) => {
-            if (status == 'complete') {
-                const placeSearch = new AMap.PlaceSearch({
-                    type: '网球场', // 严格筛选网球场，排除体育用品店
-                    pageSize: 30,  // 展示更多场馆
-                    pageIndex: 1,
-                    map: map,
-                    autoFitView: true
-                });
+            const placeSearch = new AMap.PlaceSearch({
+                type: '网球场',
+                pageSize: 30,
+                map: map,
+                autoFitView: true
+            });
 
-                placeSearch.searchNearBy('网球', result.position, 10000, (status, result) => {
-                    if (status === 'complete' && result.info === 'OK') {
-                        const apiCourts = result.poiList.pois.map(p => ({
+            // 获取位置并搜索
+            geolocation.getCurrentPosition((status, result) => {
+                const searchPos = (status === 'complete') ? result.position : map.getCenter();
+                if (status !== 'complete') console.warn('定位失败，由中心点搜索');
+
+                placeSearch.searchNearBy('网球', searchPos, 10000, (s, r) => {
+                    if (s === 'complete' && r.info === 'OK') {
+                        const apiCourts = r.poiList.pois.map(p => ({
                             name: p.name,
                             address: p.address,
-                            dist: p.distance + 'm',
+                            dist: p.distance ? (p.distance + 'm') : '距离未知',
                             rating: (p.shopinfo && p.shopinfo.score) ? p.shopinfo.score : 4.5,
-                            location: p.location // 存储坐标用于导航
+                            location: p.location
                         }));
                         renderCourts(apiCourts);
                     } else {
                         renderCourts(fallbackCourts);
                     }
                 });
-            } else {
-                renderCourts(fallbackCourts);
-            }
+            });
         });
     };
 
     const loadMap = () => {
         if (window.mapInitialized) return;
+        const container = document.getElementById('amap-container');
+        if (!container) return;
 
         // 标记已尝试初始化
         window.mapInitialized = true;
@@ -449,37 +483,37 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.AMap && window.AMap.Map) {
             initAMap(window.AMap);
         } else {
-            const mapContainer = document.getElementById('amap-container');
-            showMapPlaceholder(mapContainer, "正在等待地图资源", "请稍候，系统正在为您链接高德服务...");
-            // 如果5秒后还没加载出来，显示配置提示
+            showMapPlaceholder(container, "云端连接中", "正在努力为您拉取高德实时数据...");
+            // 如果5秒后还没加载出来，可能Key有问题或网络不通
             setTimeout(() => {
                 if (!window.AMap) {
-                    showMapPlaceholder(mapContainer, "地图初始化超时", "请检查网络或确认 API Key 配置是否正确");
+                    showMapPlaceholder(container, "API 配置检测", "请手动确认 index.html 中高德 Key 是否激活");
                 }
             }, 5000);
         }
     };
 
-    // 暴露给全局的回调函数
-    window.onAMapLoad = () => {
-        console.log("AMap loaded via callback");
-        loadMap();
-    };
+    // 将实例加载函数暴露给全局回调
+    window.loadMapInstance = loadMap;
 
     const showMapPlaceholder = (container, title, subtitle) => {
         if (!container) return;
         container.innerHTML = `
             <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background: linear-gradient(135deg, rgba(206,255,0,0.05) 0%, rgba(255,255,255,0.02) 100%); border-radius:15px; color:var(--text-dim); text-align:center; padding:20px; border: 1px solid rgba(255,255,255,0.05);">
-                <i class="fas fa-satellite-dish" style="font-size:3rem; margin-bottom:15px; color:var(--primary); opacity: 0.8;"></i>
+                <i class="fas fa-satellite-dish" style="font-size:3.5rem; margin-bottom:15px; color:var(--primary); opacity: 0.8;"></i>
                 <h3 style="color: white; margin-bottom: 8px;">${title}</h3>
                 <p style="font-size:0.85rem; opacity: 0.7;">${subtitle}</p>
-                <div style="margin-top: 20px; font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 20px;">
-                    AMap JS API 2.0
+                <div style="margin-top: 20px; font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 5px 20px; border-radius: 20px; color: var(--primary);">
+                    高德地图 JS API V2.0
                 </div>
             </div>
         `;
     };
 
-    // 尝试立刻加载（如果脚本已缓存）
-    setTimeout(loadMap, 500);
+    // 自动重试加载
+    setTimeout(() => {
+        if (!window.mapInitialized && document.getElementById('courts').classList.contains('visible')) {
+            loadMap();
+        }
+    }, 1000);
 });
