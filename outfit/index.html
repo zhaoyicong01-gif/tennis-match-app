@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HoroFit | 智能星盘 & 天气电子衣橱</title>
+    <meta name="description" content="HoroFit - 您的智能穿搭顾问。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Noto+Sans+SC:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div id="app">
+        <nav class="sidebar">
+            <div class="logo">
+                <i data-lucide="sparkles"></i>
+                <span>HoroFit</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-page="daily"><i data-lucide="calendar"></i> 每日推荐</li>
+                <li data-page="wardrobe"><i data-lucide="shirt"></i> 我的衣橱</li>
+                <li data-page="stylist"><i data-lucide="palette"></i> 2D搭配</li>
+                <li data-page="tryon"><i data-lucide="user"></i> 3D试穿</li>
+                <li data-page="shop"><i data-lucide="shopping-bag"></i> 灵感发现</li>
+            </ul>
+            <div class="user-profile">
+                <div class="avatar"></div>
+                <div class="user-info">
+                    <p class="name">星夜旅人</p>
+                    <p class="sign">请设置生日</p>
+                </div>
+            </div>
+        </nav>
+
+        <main class="content">
+            <header class="status-bar">
+                <div class="glass-card status-item weather">
+                    <i data-lucide="cloud-sun"></i>
+                    <div class="status-text">
+                        <span class="value">22°C 晴</span>
+                        <span class="label">上海</span>
+                    </div>
+                </div>
+                <div class="glass-card status-item horoscope">
+                    <i data-lucide="star"></i>
+                    <div class="status-text">
+                        <span class="value">今日运势: <span id="fortune-luck">--</span></span>
+                        <span class="label">幸运色: <span id="fortune-color">--</span></span>
+                    </div>
+                </div>
+                <div class="glass-card status-item birthday-input">
+                    <i data-lucide="cake"></i>
+                    <div class="status-text">
+                        <input type="date" id="birth-date" class="invisible-input">
+                        <span class="label">点击设置生日</span>
+                    </div>
+                </div>
+            </header>
+
+            <div id="page-content">
+                <section id="page-daily" class="page active">
+                    <div class="hero-section">
+                        <h1>今日穿搭建议</h1>
+                        <p id="daily-welcome">输入生日获取星盘解读和专属穿搭</p>
+                    </div>
+                    <div class="recommendation-grid">
+                        <div class="outfit-preview glass-card">
+                            <div class="preview-canvas" id="daily-outfit-canvas"></div>
+                            <div class="outfit-info">
+                                <h3 id="recommendation-title">加载中...</h3>
+                                <p id="recommendation-desc">根据您的特质生成</p>
+                            </div>
+                        </div>
+                        <div class="details-panel glass-card">
+                            <h3>星盘 & 穿搭逻辑</h3>
+                            <div id="horoscope-report" class="report-box">
+                                <p class="report-text">请在上方设置您的生日以开启星盘分析。</p>
+                            </div>
+                            <ul class="detail-list" id="logic-list"></ul>
+                            <button class="btn btn-primary" style="width:100%">确认今日穿搭</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-wardrobe" class="page">
+                    <div class="section-header">
+                        <h2>我的衣橱</h2>
+                        <div class="actions" style="margin: 1rem 0; display:flex; gap:10px;">
+                            <button id="import-taobao-btn" class="btn btn-secondary"><i data-lucide="shopping-cart"></i>
+                                淘宝导入</button>
+                            <button id="add-item-btn" class="btn btn-secondary"><i data-lucide="plus"></i> 添加</button>
+                        </div>
+                    </div>
+                    <div class="wardrobe-grid" id="wardrobe-items"></div>
+                </section>
+
+                <section id="page-stylist" class="page">
+                    <div class="stylist-container">
+                        <div class="canvas-area glass-card" id="stylist-canvas">
+                            <p class="placeholder">点击下方或侧边单品添加</p>
+                        </div>
+                        <div class="items-drawer glass-card">
+                            <div class="drawer-grid" id="drawer-items"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-tryon" class="page">
+                    <div class="tryon-layout">
+                        <div class="canvas-3d glass-card" id="three-container"></div>
+                        <div class="controls-panel glass-card">
+                            <h3>身材维度</h3>
+                            <div class="form-group"><label>身高 (cm)</label><input type="number" value="175"
+                                    id="dim-height"></div>
+                            <div class="form-group"><label>体重 (kg)</label><input type="number" value="65"
+                                    id="dim-weight"></div>
+                            <button class="btn btn-primary" id="update-model" style="width:100%">更新模型</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="page-shop" class="page">
+                    <h2>为您推荐的新单品</h2>
+                    <div class="shop-grid" id="shop-items"></div>
+                </section>
+            </div>
+        </main>
+
+        <nav class="mobile-nav">
+            <div class="mobile-nav-item active" data-page="daily"><i data-lucide="calendar"></i><span>推荐</span></div>
+            <div class="mobile-nav-item" data-page="wardrobe"><i data-lucide="shirt"></i><span>衣橱</span></div>
+            <div class="mobile-nav-item" data-page="stylist"><i data-lucide="palette"></i><span>搭配</span></div>
+            <div class="mobile-nav-item" data-page="tryon"><i data-lucide="user"></i><span>试穿</span></div>
+        </nav>
+
+        <div id="upload-modal" class="modal">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3>上传衣物</h3><button class="close-btn" id="modal-close-icon"><i data-lucide="x"></i></button>
+                </div>
+                <div class="upload-zone" id="drop-zone"><i data-lucide="camera" size="48"></i>
+                    <p>上传图片</p><input type="file" id="file-input" hidden>
+                </div>
+                <div class="form-grid" style="margin-top:1rem;"><input type="text" id="item-name" placeholder="名称"
+                        style="width:100%; margin-bottom:10px; padding:10px; border-radius:8px; background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); color:white;">
+                </div>
+                <div class="modal-actions"><button class="btn btn-primary" id="save-item" style="width:100%">保存</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="taobao-modal" class="modal">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3>淘宝批量导入</h3><button class="close-btn" id="taobao-close-icon"><i data-lucide="x"></i></button>
+                </div>
+                <textarea id="taobao-input" placeholder='[{"name": "白T", "img": "..."}, ...]'
+                    style="width:100%; height:150px; background:rgba(0,0,0,0.2); color:white; border-radius:10px; padding:10px;"></textarea>
+                <button class="btn btn-primary" id="sync-taobao" style="width:100%; margin-top:1rem;">开始同步</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

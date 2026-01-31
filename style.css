@@ -24,12 +24,17 @@ body {
     color: var(--text-main);
     overflow: hidden;
     height: 100vh;
+    height: 100dvh;
+    /* Better for mobile */
 }
 
 .app-container {
     display: flex;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
+    overflow: hidden;
+    /* Prevent container from scrolling */
 }
 
 /* 侧边导航 */
@@ -110,6 +115,7 @@ body {
     padding: 2rem;
     position: relative;
     background: radial-gradient(circle at top right, rgba(45, 90, 39, 0.15), transparent);
+    scroll-behavior: smooth;
 }
 
 .view {
@@ -119,6 +125,75 @@ body {
 
 .view.visible {
     display: block;
+}
+
+.section-header {
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: var(--text-dim);
+}
+
+.sub-header {
+    margin: 2rem 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sub-header h3 {
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.mb-4 {
+    margin-bottom: 2rem;
+}
+
+/* 布局辅助 */
+.merged-content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+
+@media (min-width: 1200px) {
+    .merged-content-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        /* Calendar takes more space */
+        align-items: start;
+    }
+}
+
+.settings-list {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.settings-list li {
+    padding: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.settings-list li:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--primary);
+}
+
+.settings-list li:last-child {
+    border-bottom: none;
 }
 
 @keyframes fadeIn {
@@ -138,13 +213,12 @@ body {
     height: 300px;
     border-radius: 24px;
     background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent), url('tennis_app_hero_bg_new.png');
-    /* 将由JS处理或占位 */
     background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
     padding: 3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     border: 1px solid var(--glass-border);
 }
 
@@ -305,55 +379,80 @@ body {
     margin-top: 1rem;
 }
 
-/* 日历样式 */
-.week-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-top: 2rem;
-}
-
-.day-cell {
-    aspect-ratio: 1/1.2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.day-cell.today {
-    border-color: var(--primary);
-    background: rgba(206, 255, 0, 0.05);
-}
-
-.day-cell.available::after {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
-    border-radius: 50%;
-    margin-top: 8px;
-    box-shadow: 0 0 10px var(--primary);
-}
-
-.day-cell:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.05);
-}
-
-.day-name {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-}
-
 .day-num {
     font-size: 1.2rem;
     font-weight: 700;
+}
+
+/* 24小时时间槽样式 */
+.time-slots-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+    animation: slideUp 0.3s ease-out;
+}
+
+.time-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 1rem;
+}
+
+.time-slot {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-dim);
+}
+
+.time-slot:hover {
+    border-color: var(--primary);
+    background: rgba(206, 255, 0, 0.05);
+    color: var(--text-main);
+}
+
+.time-slot.selected {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+    font-weight: 600;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.calendar-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.selected-info {
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .time-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* 视频卡片 */
@@ -413,10 +512,13 @@ body {
     color: white;
     border-radius: 10px;
     cursor: pointer;
+    transition: var(--transition);
 }
 
+.type-btn.active,
 .type-btn:hover {
     border-color: var(--primary);
+    background: rgba(206, 255, 0, 0.1);
 }
 
 textarea {
@@ -537,8 +639,8 @@ textarea {
 /* 响应式调整 - 手机端 */
 @media (max-width: 768px) {
     body {
-        overflow: auto;
-        /* 允许滚动 */
+        overflow: hidden;
+        /* Keep body fixed */
     }
 
     .app-container {
@@ -599,8 +701,11 @@ textarea {
 
     /* 主内容区调整 */
     .main-content {
-        padding: 1.5rem 1rem 100px 1rem;
-        /* 底部留出导航栏空间 */
+        padding: 1.5rem 1rem 120px 1rem;
+        /* Increase bottom padding for nav */
+        height: calc(100dvh - 70px);
+        /* Subtract nav height */
+        overflow-y: auto;
     }
 
     .hero-header {

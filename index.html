@@ -3,8 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>AceMatch - 您的智能网球搭子社区</title>
+    <!-- 高德地图安全配置 -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: 'c94e780e352899cd503d15555ba8457e',
+        }
+    </script>
     <meta name="description" content="AceMatch 是一款专为网球爱好者设计的社交应用，提供智能匹配、水平评定、空闲管理及大师教程功能。">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -27,10 +34,8 @@
             </div>
             <ul class="nav-links">
                 <li class="active" data-target="home"><i class="fas fa-home"></i><span>首页</span></li>
-                <li data-target="calendar"><i class="fas fa-calendar-alt"></i><span>空闲</span></li>
-                <li data-target="match"><i class="fas fa-users"></i><span>匹配</span></li>
-                <li data-target="courts"><i class="fas fa-map-location-dot"></i><span>场馆</span></li>
-                <li data-target="learn"><i class="fas fa-graduation-cap"></i><span>教程</span></li>
+                <li data-target="match"><i class="fas fa-users"></i><span>约球</span></li>
+                <li data-target="explore"><i class="fas fa-compass"></i><span>发现</span></li>
                 <li data-target="profile"><i class="fas fa-user"></i><span>我的</span></li>
             </ul>
             <div class="nav-footer">
@@ -88,86 +93,137 @@
                             <span class="stat-label">胜率</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-num">12</span>
+                            <span class="stat-num" id="checkInDaysDisplay">12</span>
                             <span class="stat-label">打卡天数</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 日历空闲 -->
-            <section id="calendar" class="view">
-                <h2>我的空闲时间</h2>
-                <div class="calendar-container card glass">
-                    <div class="calendar-header">
-                        <button class="icon-btn"><i class="fas fa-chevron-left"></i></button>
-                        <h3 id="calendarMonth">2024年 10月</h3>
-                        <button class="icon-btn"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <div class="week-grid" id="weekGrid">
-                        <!-- 周一至周日 -->
-                    </div>
-                    <div class="time-slots" id="timeSlots">
-                        <!-- 时间段 -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- 匹配板块 -->
+            <!-- 约球板块 (合并了日历和匹配) -->
             <section id="match" class="view">
-                <h2>为你推荐的球友</h2>
-                <div class="match-list" id="matchList">
-                    <!-- 动态加载匹配列表 -->
+                <div class="section-header">
+                    <h2>安排你的球局</h2>
+                    <p>设置空闲时间，查看推荐球友</p>
                 </div>
-            </section>
 
-            <!-- 场馆板块 -->
-            <section id="courts" class="view">
-                <h2>附近热门网球场</h2>
-                <div class="card glass map-card">
-                    <div id="amap-container" class="map-container">
-                        <!-- 地图将在这里渲染 -->
-                        <div class="map-placeholder">
-                            <i class="fas fa-map-marked-alt"></i>
-                            <p>正在加载高德地图...</p>
-                            <small style="color:var(--text-dim)">需要配置 API Key 才能查看实时地图</small>
+                <div class="merged-content-grid">
+                    <!-- 日历部分 -->
+                    <div class="calendar-part">
+                        <div class="calendar-container card glass">
+                            <div class="calendar-header">
+                                <button class="icon-btn"><i class="fas fa-chevron-left"></i></button>
+                                <h3 id="calendarMonth">2024年 10月</h3>
+                                <button class="icon-btn"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <div class="week-grid" id="weekGrid">
+                                <!-- 周一至周日 -->
+                            </div>
+                            <div class="time-slots-container" id="timeSlotsArea" style="display: none;">
+                                <div class="sub-header" style="margin-top: 0;">
+                                    <h4 id="selectedDateTitle">选择具体时间 (10月25日)</h4>
+                                </div>
+                                <div class="time-grid" id="hourGrid">
+                                    <!-- 24小时槽位 -->
+                                </div>
+                                <div class="calendar-footer">
+                                    <div class="selected-info">
+                                        <i class="fas fa-clock"></i> 已选: <span id="selectedTimeRange">未选择</span>
+                                    </div>
+                                    <button class="primary-btn" style="width: auto; margin-top: 0; padding: 8px 20px;"
+                                        id="saveAvailabilityBtn">
+                                        保存空闲
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推荐球友部分 -->
+                    <div class="match-part">
+                        <div class="sub-header">
+                            <h3><i class="fas fa-user-check"></i> 为你推荐的球友</h3>
+                        </div>
+                        <div class="match-list" id="matchList">
+                            <!-- 动态加载匹配列表 -->
                         </div>
                     </div>
                 </div>
-                <div class="court-list" id="courtList">
-                    <!-- 场馆列表 (API加载或兜底数据) -->
+            </section>
+
+            <!-- 发现板块 (合并了场馆和学院) -->
+            <section id="explore" class="view">
+                <div class="section-header">
+                    <h2>探索网球世界</h2>
+                    <p>寻找优质场馆，学习专业技术</p>
+                </div>
+
+                <!-- 学院教程部分 -->
+                <div class="academy-part mb-4">
+                    <div class="sub-header">
+                        <h3><i class="fas fa-graduation-cap"></i> 网球学院</h3>
+                    </div>
+                    <div class="category-tabs">
+                        <span class="tab active">热门</span>
+                        <span class="tab">正手</span>
+                        <span class="tab">反手</span>
+                        <span class="tab">发球</span>
+                        <span class="tab">战术</span>
+                    </div>
+                    <div class="video-grid" id="tutorialGrid">
+                        <!-- 动态加载教程 -->
+                    </div>
+                </div>
+
+                <!-- 场馆部分 -->
+                <div class="courts-part">
+                    <div class="sub-header">
+                        <h3><i class="fas fa-map-location-dot"></i> 附近热门场馆</h3>
+                    </div>
+                    <div class="card glass map-card">
+                        <div id="amap-container" class="map-container">
+                            <!-- 地图将在这里渲染 -->
+                            <div class="map-placeholder">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <p>正在加载高德地图...</p>
+                                <small style="color:var(--text-dim)">需要配置 API Key 才能查看实时地图</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="court-list" id="courtList">
+                        <!-- 场馆列表 (API加载或兜底数据) -->
+                    </div>
                 </div>
             </section>
 
-            <!-- 教程板块 -->
-            <section id="learn" class="view">
-                <h2>网球学院</h2>
-                <div class="category-tabs">
-                    <span class="tab active">热门</span>
-                    <span class="tab">正手</span>
-                    <span class="tab">反手</span>
-                    <span class="tab">发球</span>
-                    <span class="tab">战术</span>
-                </div>
-                <div class="video-grid" id="tutorialGrid">
-                    <!-- 动态加载教程 -->
-                </div>
-            </section>
             <!-- 个人中心板块 -->
             <section id="profile" class="view">
-                <h2>我的档案</h2>
+                <div class="section-header">
+                    <h2>我的档案</h2>
+                </div>
                 <div class="profile-header card glass">
                     <div class="profile-info">
                         <div class="profile-avatar">S</div>
                         <div class="profile-text">
                             <h3>SuperAce</h3>
-                            <p>NTRP 4.0 • 胜率 85%</p>
+                            <p>NTRP 4.0 • 胜率 85% • 上海</p>
                         </div>
                     </div>
-                    <button class="primary-btn share-btn" id="sharePosterBtn">
+                    <button class="primary-btn share-btn" id="sharePosterBtn" style="width: auto; padding: 12px 24px;">
                         <i class="fas fa-share-nodes"></i> 生成球星卡
                     </button>
                     <canvas id="posterCanvas" width="600" height="800" style="display:none;"></canvas>
+                </div>
+
+                <div class="profile-details grid shadow-sm">
+                    <div class="card glass">
+                        <h4>基本设置</h4>
+                        <ul class="settings-list">
+                            <li>通知管理 <i class="fas fa-chevron-right"></i></li>
+                            <li>隐私设置 <i class="fas fa-chevron-right"></i></li>
+                            <li>关于 AceMatch <i class="fas fa-chevron-right"></i></li>
+                        </ul>
+                    </div>
                 </div>
             </section>
         </main>
@@ -178,13 +234,13 @@
         <div class="modal-content glass">
             <span class="close-modal">&times;</span>
             <h2>训练打卡</h2>
-            <div class="check-in-options">
-                <button class="type-btn">底线对打</button>
+            <div class="check-in-options" id="checkInTypeContainer">
+                <button class="type-btn active">底线对打</button>
                 <button class="type-btn">发球练习</button>
                 <button class="type-btn">正式比赛</button>
             </div>
-            <textarea placeholder="写下今日的心得..."></textarea>
-            <button class="primary-btn">提交打卡</button>
+            <textarea id="checkInMessage" placeholder="写下今日的心得..."></textarea>
+            <button class="primary-btn" id="submitCheckInBtn">提交打卡</button>
         </div>
     </div>
 
@@ -226,12 +282,9 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        window._AMapSecurityConfig = {
-            securityJsCode: 'YOUR_SECURITY_CODE_HERE', // 请替换为你的高德 Web端 JS API 安全密钥
-        }
-    </script>
-    <script src="https://webapi.amap.com/loader/1.0.1/index.js"></script>
+    <!-- 直接加载高德地图 JS API -->
+    <script type="text/javascript"
+        src="https://webapi.amap.com/maps?v=2.0&key=de0c3f54bcda0d0dc814f2e264c378b0&plugin=AMap.PlaceSearch,AMap.Geolocation"></script>
     <script src="script.js"></script>
 </body>
 
