@@ -454,16 +454,30 @@ document.addEventListener('DOMContentLoaded', () => {
         list.forEach(c => {
             const item = document.createElement('div');
             item.className = 'card glass court-item';
+            item.style.cursor = 'pointer';
             item.innerHTML = `
-                <i class="fas fa-map-pin" style="font-size: 1.2rem; color: var(--text-dim);"></i>
+                <i class="fas fa-map-pin" style="font-size: 1.2rem; color: var(--primary);"></i>
                 <div class="court-info">
                     <h4>${c.name}</h4>
                     <p style="font-size: 0.8rem; color: var(--text-dim);">${c.address || '暂无地址'} · ${c.dist || '未知距离'}</p>
+                    <div style="margin-top: 5px; font-size: 0.7rem; color: var(--primary);"><i class="fas fa-location-arrow"></i> 点击开始导航</div>
                 </div>
                 <div class="court-score">
                     ${c.rating || 4.5} <span style="font-size:0.8rem">分</span>
                 </div>
             `;
+
+            // 点击跳转高德地图导航
+            item.onclick = () => {
+                if (c.location) {
+                    const { lng, lat } = c.location;
+                    const navUrl = `https://uri.amap.com/marker?position=${lng},${lat}&name=${encodeURIComponent(c.name)}&coordinate=gaode&callnative=1`;
+                    window.open(navUrl, '_blank');
+                } else {
+                    alert('暂无位置信息，无法开启导航');
+                }
+            };
+
             courtList.appendChild(item);
         });
     };
@@ -492,20 +506,21 @@ document.addEventListener('DOMContentLoaded', () => {
         geolocation.getCurrentPosition((status, result) => {
             if (status == 'complete') {
                 const placeSearch = new AMap.PlaceSearch({
-                    type: '网球场|体育馆',
-                    pageSize: 10,
+                    type: '网球场', // 严格筛选网球场，排除体育用品店
+                    pageSize: 30,  // 展示更多场馆
                     pageIndex: 1,
                     map: map,
                     autoFitView: true
                 });
 
-                placeSearch.searchNearBy('网球', result.position, 5000, (status, result) => {
+                placeSearch.searchNearBy('网球', result.position, 10000, (status, result) => {
                     if (status === 'complete' && result.info === 'OK') {
                         const apiCourts = result.poiList.pois.map(p => ({
                             name: p.name,
                             address: p.address,
                             dist: p.distance + 'm',
-                            rating: (p.shopinfo && p.shopinfo.score) ? p.shopinfo.score : 4.5
+                            rating: (p.shopinfo && p.shopinfo.score) ? p.shopinfo.score : 4.5,
+                            location: p.location // 存储坐标用于导航
                         }));
                         renderCourts(apiCourts);
                     } else {
