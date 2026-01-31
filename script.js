@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // 加载插件
-        AMap.plugin(['AMap.Geolocation', 'AMap.PlaceSearch'], function () {
+        AMap.plugin(['AMap.Geolocation', 'AMap.PlaceSearch', 'AMap.Weather'], function () {
             const geolocation = new AMap.Geolocation({
                 enableHighAccuracy: true,
                 timeout: 5000,
@@ -464,6 +464,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             map.addControl(geolocation);
 
+            const weather = new AMap.Weather();
+
             const placeSearch = new AMap.PlaceSearch({
                 type: '网球场',
                 pageSize: 30,
@@ -471,9 +473,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 autoFitView: true
             });
 
+            // 更新天气函数
+            const updateWeatherUI = (city) => {
+                weather.getLive(city, (err, data) => {
+                    if (err) return;
+                    document.getElementById('tempValue').innerText = data.temperature + '°C';
+                    document.getElementById('cityDetail').innerHTML = `<i class="fas fa-location-dot"></i> ${data.city}`;
+                    document.getElementById('windDetail').innerHTML = `<i class="fas fa-wind"></i> ${data.windDirection}风${data.windPower}级`;
+                    document.getElementById('humidityDetail').innerHTML = `<i class="fas fa-droplet"></i> ${data.humidity}% 湿度`;
+
+                    // 计算指数
+                    let score = 85;
+                    const temp = parseInt(data.temperature);
+                    if (temp > 32 || temp < 5) score -= 30;
+                    const wind = parseInt(data.windPower);
+                    if (wind > 4) score -= 30;
+                    if (data.weather.includes('雨')) score = 15;
+
+                    document.getElementById('weatherIndex').innerText = Math.max(10, Math.min(100, score));
+                    const iconEl = document.getElementById('weatherIcon');
+                    if (data.weather.includes('云')) iconEl.className = 'fas fa-cloud-sun';
+                    else if (data.weather.includes('雨')) iconEl.className = 'fas fa-cloud-showers-heavy';
+                    else if (data.weather.includes('阴')) iconEl.className = 'fas fa-cloud';
+                    else iconEl.className = 'fas fa-sun';
+
+                    let advice = "天气极佳，适合冲击个人最佳状态！";
+                    if (score < 60) advice = "环境一般，建议转战室内场或进行理论学习。";
+                    else if (temp > 30) advice = "气温较高，请注意补水防暑。";
+                    document.getElementById('weatherAdvice').innerText = advice;
+                });
+            };
+
             // 获取位置并搜索
             geolocation.getCurrentPosition((status, result) => {
                 const searchPos = (status === 'complete') ? result.position : map.getCenter();
+                const city = (status === 'complete') ? (result.addressComponent.city || result.addressComponent.province) : '北京市';
+
+                updateWeatherUI(city);
+
                 if (status !== 'complete') console.warn('定位失败，由中心点搜索');
 
                 placeSearch.searchNearBy('网球', searchPos, 10000, (s, r) => {

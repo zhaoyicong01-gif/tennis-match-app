@@ -994,7 +994,8 @@ textarea {
     }
 
     .main-content {
-        padding: calc(15px + env(safe-area-inset-top)) 15px calc(100px + env(safe-area-inset-bottom)) 15px;
+        padding: calc(15px + env(safe-area-inset-top)) 15px calc(80px + env(safe-area-inset-bottom)) 15px;
+        /* 适当保留导航空间，但不留冗余空白 */
         min-height: 100dvh;
         overflow-y: visible;
         display: block;
