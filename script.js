@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     view.classList.add('visible');
                 }
             });
+
+            // 懒加载地图：只有进入发现页才加载
+            if (target === 'explore' && !window.mapInitialized) {
+                setTimeout(loadMap, 300);
+            }
         });
     });
 
@@ -95,47 +100,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 模拟教程数据 (采用图文形式，规避播放权限问题) ---
     const tutorials = [
         {
-            title: '费德勒同款正手：深度解析',
-            duration: '5分钟阅读',
+            title: '顶级正手突破：拉出职业级上旋',
+            duration: '12分钟',
             diff: '中级',
-            img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a4ea13?auto=format&fit=crop&w=400&q=80',
-            content: `
-                <p>费德勒的正手被誉为网球史上最优雅的动作之一。其核心在于“液态手腕”和极致的身体平衡。</p>
-                <div class="content-step">
-                    <h4>1. 准备动作 (The Unit Turn)</h4>
-                    <p>肩膀带动球拍向后转动，左手指向球来的方向，保持上半身紧凑。</p>
-                </div>
-                <div class="content-step">
-                    <h4>2. 击球点 (Contact Point)</h4>
-                    <p>在身体正前方击球，手臂呈自然的直线伸展，利用核心力量驱动球拍。</p>
-                </div>
-                <div class="content-step">
-                    <h4>3. 随挥 (The Follow Through)</h4>
-                    <p>球拍自然绕过肩膀，形成一个完整的弧形，带出强烈的外旋。建议每天进行50次空挥练习。</p>
-                </div>
-            `
+            img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a4bd13?auto=format&fit=crop&w=400&q=80',
+            bvid: 'BV1vL411p7Z1', // 示例B站视频ID
+            content: '在身体正前方击球，手臂呈自然的直线伸展，利用核心力量驱动球拍。随挥自然绕过肩膀。'
         },
         {
-            title: '单反击球：从入门到精通',
-            duration: '8分钟阅读',
+            title: '单反击球核心秘籍',
+            duration: '8分钟',
             diff: '高级',
             img: 'https://images.unsplash.com/photo-1595435934249-5df7ed86eb82?auto=format&fit=crop&w=400&q=80',
-            content: `
-                <p>现代单反（One-Handed Backhand）不再只是过渡动作，它同样可以具备强大的攻击性。</p>
-                <div class="content-step">
-                    <h4>核心要素：肩关节锁定</h4>
-                    <p>在挥拍瞬间，确保肩膀稳固，利用大臂带动小臂，像挥舞鞭子一样甩出。</p>
-                </div>
-            `
+            bvid: 'BV1hY41117M8',
+            content: '现代单反的核心在于肩关节锁定。挥拍瞬间肩膀稳固，大臂带动小臂，像挥舞鞭子一样。'
         },
         {
-            title: '发球基石：科学的抛球高度',
-            duration: '4分钟阅读',
+            title: '发球必杀技：高度与旋转',
+            duration: '10分钟',
             diff: '入门',
             img: 'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=400&q=80',
-            content: `
-                <p>如果你无法稳定地抛球，你的发球将永远不稳定。抛球的高度应略高于你球拍伸直后的最高点。</p>
-            `
+            bvid: 'BV1mJ411n7fS',
+            content: '抛球高度应略高于球拍伸直后的最高点。确保身体呈弓箭步蓄力，利用腰腹力量。'
         }
     ];
 
@@ -164,13 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.addEventListener('click', () => {
                 videoTitle.innerText = t.title;
-                // 将视频区域替换为精美的图文内容
                 const modalBody = videoModal.querySelector('.video-container');
+                // 使用B站嵌入框架
                 modalBody.innerHTML = `
-                    <div class="article-content" style="padding: 1rem; line-height: 1.6; color: #eee;">
-                        <img src="${t.img}" style="width: 100%; border-radius: 12px; margin-bottom: 1.5rem;">
-                        ${t.content}
-                    </div>
+                    <iframe src="//player.bilibili.com/player.html?bvid=${t.bvid}&page=1&high_quality=1&as_wide=1" 
+                            scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
+                            style="width: 100%; height: 100%;"></iframe>
                 `;
                 videoModal.style.display = 'block';
             });
@@ -336,21 +321,34 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedHours.clear();
         updateTimeRangeDisplay();
 
-        // 模拟 08:00 - 22:00
+        // 模拟一些已经被占用的时段 (为了美观和真实感)
+        const bookedHours = [9, 14, 15, 19];
+
         for (let h = 8; h <= 22; h++) {
+            const isBooked = bookedHours.includes(h);
             const slot = document.createElement('div');
-            slot.className = 'time-slot';
-            slot.innerText = `${h}:00`;
-            slot.onclick = () => {
-                if (selectedHours.has(h)) {
-                    selectedHours.delete(h);
-                    slot.classList.remove('selected');
-                } else {
-                    selectedHours.add(h);
-                    slot.classList.add('selected');
-                }
-                updateTimeRangeDisplay();
-            };
+            slot.className = `time-slot ${isBooked ? 'booked' : ''}`;
+            slot.innerHTML = `
+                <div class="time-label">${h}:00</div>
+                <div class="status-dot"></div>
+            `;
+
+            if (!isBooked) {
+                slot.onclick = () => {
+                    if (selectedHours.has(h)) {
+                        selectedHours.delete(h);
+                        slot.classList.remove('selected');
+                    } else {
+                        selectedHours.add(h);
+                        slot.classList.add('selected');
+                        // 触觉反馈 (如果设备支持)
+                        if (navigator.vibrate) navigator.vibrate(10);
+                    }
+                    updateTimeRangeDisplay();
+                };
+            } else {
+                slot.title = "该时段已被预约";
+            }
             hourGrid.appendChild(slot);
         }
         timeSlotsArea.style.display = 'block';
@@ -490,7 +488,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const loadMap = () => {
+        if (window.mapInitialized) return;
         const mapContainer = document.getElementById('amap-container');
+
+        // 标记已尝试初始化
+        window.mapInitialized = true;
 
         // 如果已经通过 script 标签直接加载
         if (window.AMap && window.AMap.Map) {
@@ -529,6 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     };
 
-    // 稍微延迟一下确保 DOM 和 AMap 都准备好
-    setTimeout(loadMap, 500);
+    // 手机端无需自动延迟加载，等待用户点击Tab触发
+    if (window.innerWidth > 768) {
+        setTimeout(loadMap, 1000);
+    }
 });
