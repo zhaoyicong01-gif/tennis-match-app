@@ -983,14 +983,39 @@ textarea {
         height: 100%;
     }
 
+    .status-card {
+        margin-bottom: 8px !important;
+        padding: 10px !important;
+    }
+
+    .status-header h3 {
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .action-tag {
+        padding: 8px !important;
+        font-size: 0.75rem !important;
+    }
+
     .match-list {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px !important;
     }
 
     .match-card {
-        padding: 10px !important;
+        padding: 8px !important;
+        margin-bottom: 0;
+    }
+
+    .match-info h4 {
+        font-size: 0.85rem !important;
+    }
+
+    .match-badge-mini {
+        font-size: 0.6rem !important;
+        padding: 1px 4px !important;
     }
 
     .avatar {
@@ -1000,13 +1025,18 @@ textarea {
 
     /* 找场页浓缩 */
     .map-card {
-        height: 180px !important;
-        /* 地图在手机端不能占太大空间 */
-        margin-bottom: 8px;
+        height: 150px !important;
+        /* 进一步压缩地图以适配 iPhone 16 Pro */
+        margin-bottom: 6px;
     }
 
     .court-item {
-        padding: 10px !important;
+        padding: 8px !important;
+        gap: 8px !important;
+    }
+
+    .court-info h4 {
+        font-size: 0.85rem !important;
     }
 
     /* 改进空闲时间设置交互 */
