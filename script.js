@@ -97,65 +97,96 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- 模拟教程数据 (采用图文形式，规避播放权限问题) ---
-    const tutorials = [
+    // --- 模拟笔记数据 (小红书图文风) ---
+    const notes = [
         {
-            title: '顶级正手突破：拉出职业级上旋',
-            duration: '12分钟',
-            diff: '中级',
+            title: '我的正手进化史 🎾 | 深度解析',
+            author: 'TennisPro_阿强',
+            likes: '1.2k',
             img: 'https://images.unsplash.com/photo-1622279457486-62dcc4a4bd13?auto=format&fit=crop&w=400&q=80',
-            bvid: 'BV1vL411p7Z1', // 示例B站视频ID
-            content: '在身体正前方击球，手臂呈自然的直线伸展，利用核心力量驱动球拍。随挥自然绕过肩膀。'
+            content: `
+                <p>今天想和大家分享一下正手击球的三个核心进阶技巧！✨</p>
+                <div class="note-step">
+                    <b>1️⃣ 侧身蓄力 (Unit Turn)</b>
+                    <p>很多球友正手没有力量，核心原因是缺乏躯干转动。肩膀要先于球拍转动！</p>
+                </div>
+                <div class="note-step">
+                    <b>2️⃣ 击球点 (Contact Point)</b>
+                    <p>一定要保证在身体的前侧击球，手臂呈自然的直线伸展。核心力量才是真正的原动力。🦾</p>
+                </div>
+                <p>#网球教程 #正手训练 #网球日常 #TennisLife</p>
+            `
         },
         {
-            title: '单反击球核心秘籍',
-            duration: '8分钟',
-            diff: '高级',
+            title: '单反真的优雅！送给女生的教学 🎀',
+            author: '网球少女Momo',
+            likes: '856',
             img: 'https://images.unsplash.com/photo-1595435934249-5df7ed86eb82?auto=format&fit=crop&w=400&q=80',
-            bvid: 'BV1hY41117M8',
-            content: '现代单反的核心在于肩关节锁定。挥拍瞬间肩膀稳固，大臂带动小臂，像挥舞鞭子一样。'
+            content: `
+                <p>谁说单反难练？掌握这几点，你也可以打出优雅的单反击球！👗</p>
+                <div class="note-step">
+                    <b>🌟 肩关节锁定</b>
+                    <p>在挥拍瞬间，确保肩膀稳固，利用大臂带动小臂，像挥舞鞭子一样甩出，而不是生拉硬扯。</p>
+                </div>
+                <p>#女神网球 #单反教程 #高级感网球</p>
+            `
         },
         {
-            title: '发球必杀技：高度与旋转',
-            duration: '10分钟',
-            diff: '入门',
+            title: '发球不稳定的救星！抛球是关键 🚀',
+            author: '硬地战神',
+            likes: '2.3k',
             img: 'https://images.unsplash.com/photo-1599586120429-48281b6f0ece?auto=format&fit=crop&w=400&q=80',
-            bvid: 'BV1mJ411n7fS',
-            content: '抛球高度应略高于球拍伸直后的最高点。确保身体呈弓箭步蓄力，利用腰腹力量。'
+            content: `
+                <p>如果你无法稳定地抛球，你的发球将永远不稳定。这里有个练习小窍门...👇</p>
+                <div class="note-step">
+                    <b>🎯 抛球练习法</b>
+                    <p>对着墙面或通过球筒练习，高度应略高于你球拍伸直后的最高点。保持手臂垂直向上。</p>
+                </div>
+                <p>#发球教学 #网球干货 #网球基本功</p>
+            `
         }
     ];
 
     const tutorialGrid = document.getElementById('tutorialGrid');
     const videoModal = document.getElementById('videoModal');
     const videoPlayer = document.getElementById('videoPlayer'); // 实际上作为容器使用
-    const videoTitle = document.getElementById('videoTitle');
-    const closeVideoModal = document.querySelector('.close-video-modal');
-
     if (tutorialGrid) {
-        tutorials.forEach(t => {
+        notes.forEach(n => {
             const card = document.createElement('div');
-            card.className = 'card glass video-card';
+            card.className = 'card glass note-card';
             card.style.padding = '0';
             card.style.overflow = 'hidden';
             card.innerHTML = `
-                <div style="height: 150px; background: url('${t.img}') center/cover;"></div>
+                <div style="height: 180px; background: url('${n.img}') center/cover; position: relative;">
+                    <span class="like-badge"><i class="fas fa-heart"></i> ${n.likes}</span>
+                </div>
                 <div style="padding: 1rem;">
-                    <h4 style="margin-bottom: 0.5rem;">${t.title}</h4>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim);">
-                        <span><i class="fas fa-book-open"></i> ${t.duration}</span>
-                        <span>${t.diff}</span>
+                    <h4 style="margin-bottom: 0.8rem; font-size: 0.95rem; line-height: 1.4;">${n.title}</h4>
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-dim);">
+                        <div style="width: 20px; height: 20px; border-radius: 50%; background: var(--primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px;">
+                            ${n.author.charAt(0)}
+                        </div>
+                        <span>${n.author}</span>
                     </div>
                 </div>
             `;
 
             card.addEventListener('click', () => {
-                videoTitle.innerText = t.title;
-                const modalBody = videoModal.querySelector('.video-container');
-                // 使用B站嵌入框架
+                const modalBody = document.getElementById('articleContentArea');
                 modalBody.innerHTML = `
-                    <iframe src="//player.bilibili.com/player.html?bvid=${t.bvid}&page=1&high_quality=1&as_wide=1" 
-                            scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
-                            style="width: 100%; height: 100%;"></iframe>
+                    <div class="note-article">
+                        <img src="${n.img}" style="width: 100%; border-radius: 15px; margin-bottom: 1.5rem; border: 1px solid var(--glass-border);">
+                        <h2 style="color: white; margin-bottom: 1rem; font-size: 1.5rem;">${n.title}</h2>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+                                ${n.author.charAt(0)}
+                            </div>
+                            <span style="color: var(--text-dim);">${n.author}</span>
+                        </div>
+                        <div class="article-text" style="color: #eee; line-height: 1.8; font-size: 1rem;">
+                            ${n.content}
+                        </div>
+                    </div>
                 `;
                 videoModal.style.display = 'block';
             });
