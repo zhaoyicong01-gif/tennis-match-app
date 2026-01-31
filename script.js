@@ -51,6 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const levelBadge = document.querySelector('.level-badge');
     const levelDesc = document.getElementById('levelDesc');
 
+    // 初始化首页高级内容 (金句旋转)
+    const tips = [
+        "接发球时，试着在对方击球瞬间做一个轻微的垫步(Split-step)，这能瞬间提升你的反应速度。",
+        "与其追求一记致胜球，不如通过稳定的深度回球逼迫对手失误。",
+        "网前截击时，动作要小，利用对方球的动能进行反射，而非大幅度挥拍。",
+        "发球的秘密在于抛球的高度和身体的放松，确保在最高点附近击球。",
+        "在底线相持中，回球到对方的后场深处是保持主动的关键。"
+    ];
+    const dailyTipEl = document.getElementById('dailyTip');
+    if (dailyTipEl) {
+        dailyTipEl.innerText = `“${tips[Math.floor(Math.random() * tips.length)]}”`;
+    }
+
     const ntrpData = {
         "1.0": ["新人", "刚接触网球，正在学习握拍与基础动作"],
         "1.5": ["入门", "能击球，但挥拍不完整且缺乏方向控制"],

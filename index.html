@@ -53,7 +53,6 @@
                 </header>
 
                 <div class="dashboard-grid">
-                    <!-- 我的等级 -->
                     <div class="card glass level-card">
                         <h3>我的 NTRP 等级 <i class="far fa-question-circle"
                                 style="font-size: 0.9rem; cursor: pointer;"></i></h3>
@@ -63,6 +62,37 @@
                         </div>
                         <input type="range" min="1.0" max="7.0" step="0.5" value="4.0" class="slider" id="levelSlider">
                         <p id="levelDesc" class="slider-hint">“能控制深度和方向，具备可靠的二发”</p>
+                    </div>
+
+                    <!-- 新增：网球天气看板 -->
+                    <div class="card glass weather-card">
+                        <div class="weather-main">
+                            <div class="weather-temp">
+                                <i class="fas fa-sun"></i>
+                                <span>24°C</span>
+                            </div>
+                            <div class="weather-index">
+                                <span class="index-score">92</span>
+                                <span class="index-label">打球指数</span>
+                            </div>
+                        </div>
+                        <p class="weather-advice">微风，体感极佳。非常适合进行底线对拉练习。</p>
+                        <div class="weather-details">
+                            <span><i class="fas fa-wind"></i> 2级风</span>
+                            <span><i class="fas fa-droplet"></i> 10% 降水</span>
+                            <span><i class="fas fa-location-dot"></i> 北京</span>
+                        </div>
+                    </div>
+
+                    <!-- 新增：每日战术金句 -->
+                    <div class="card glass tip-card">
+                        <div class="tip-header">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>网球进阶秘籍</span>
+                        </div>
+                        <blockquote id="dailyTip">
+                            “接发球时，试着在对方击球瞬间做一个轻微的垫步(Split-step)，这能瞬间提升你的反应速度。”
+                        </blockquote>
                     </div>
 
 

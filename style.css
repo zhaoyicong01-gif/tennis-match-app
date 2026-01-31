@@ -263,6 +263,110 @@ body.modal-open .floating-check-in {
     max-width: 400px;
 }
 
+/* 天气看板样式 */
+.weather-card {
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(206, 255, 0, 0.05) 100%);
+    border: 1px solid var(--glass-border);
+}
+
+.weather-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.weather-temp {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+}
+
+.weather-temp i {
+    color: var(--primary);
+    filter: drop-shadow(0 0 10px var(--primary-glow));
+}
+
+.weather-index {
+    text-align: right;
+}
+
+.index-score {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.index-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.weather-advice {
+    font-size: 0.9rem;
+    color: #eee;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    padding-left: 10px;
+    border-left: 3px solid var(--primary);
+}
+
+.weather-details {
+    display: flex;
+    gap: 15px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.weather-details span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 每日贴士样式 */
+.tip-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(206, 255, 0, 0.2);
+}
+
+.tip-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+#dailyTip {
+    font-size: 0.95rem;
+    color: #ccc;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0;
+    position: relative;
+    padding: 0 10px;
+}
+
+#dailyTip::before {
+    content: '"';
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    font-size: 2rem;
+    color: var(--primary);
+    opacity: 0.2;
+}
+
 .status-header {
     display: flex;
     justify-content: space-between;
