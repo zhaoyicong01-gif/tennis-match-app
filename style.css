@@ -842,13 +842,13 @@ textarea {
 
     .side-nav {
         width: 100% !important;
-        height: 60px;
-        /* 压缩导航高度 */
+        height: calc(60px + env(safe-area-inset-bottom));
+        /* 适配 iPhone 底部手势横条 */
         position: fixed;
         bottom: 0;
         left: 0;
         flex-direction: row !important;
-        padding: 0 5px !important;
+        padding: 0 5px env(safe-area-inset-bottom) 5px !important;
         z-index: 1001;
         justify-content: space-around;
         align-items: center;
@@ -891,12 +891,12 @@ textarea {
     }
 
     .main-content {
-        padding: 12px;
-        height: calc(100dvh - 60px);
+        padding: calc(10px + env(safe-area-inset-top)) 12px 12px 12px;
+        height: calc(100dvh - (60px + env(safe-area-inset-bottom)));
         overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
     }
 
     /* 浓缩页面头部 */
@@ -958,12 +958,12 @@ textarea {
     }
 
     .level-card h3 {
-        font-size: 0.9rem;
-        margin-bottom: 8px;
+        font-size: 0.85rem;
+        margin-bottom: 5px;
     }
 
     #levelValue {
-        font-size: 2.2rem !important;
+        font-size: 2rem !important;
     }
 
     .level-badge {
@@ -1051,7 +1051,7 @@ textarea {
 
     /* 悬浮打卡按钮 */
     .floating-check-in {
-        bottom: 75px;
+        bottom: calc(75px + env(safe-area-inset-bottom));
         right: 15px;
         padding: 8px 16px;
         font-size: 0.8rem;
