@@ -891,17 +891,20 @@ textarea {
     }
 
     .main-content {
-        padding: calc(10px + env(safe-area-inset-top)) 12px 12px 12px;
+        padding: calc(15px + env(safe-area-inset-top)) 15px calc(10px + env(safe-area-inset-bottom)) 15px;
         height: calc(100dvh - (60px + env(safe-area-inset-bottom)));
-        overflow-y: auto;
+        overflow: hidden;
+        /* 严格一屏，禁止溢出滚动 */
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        justify-content: space-between;
+        /* 关键：均匀分布内容填充一屏 */
+        gap: 15px;
     }
 
     /* 浓缩页面头部 */
     .section-header {
-        margin-bottom: 8px;
+        margin-bottom: 5px;
         text-align: left;
     }
 
@@ -914,19 +917,19 @@ textarea {
         font-size: 0.75rem;
     }
 
-    /* 首页卡片浓缩 */
+    /* 首页卡片增加高度以填充视觉 */
     .hero-header {
-        height: 100px;
-        /* 进一步压缩 Hero */
-        padding: 12px;
-        margin-bottom: 0;
-        border-radius: 16px;
+        height: 180px;
+        /* 增加高度以撑满空间 */
+        padding: 24px;
+        margin-bottom: 5px;
+        border-radius: 20px;
         display: flex;
         align-items: center;
     }
 
     .hero-content h1 {
-        font-size: 1.2rem;
+        font-size: 1.8rem;
         margin: 0;
     }
 
@@ -937,33 +940,31 @@ textarea {
 
     .dashboard-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 15px;
         flex: 1;
+        /* 让网格占据剩余大部分空间 */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding-bottom: 20px;
     }
 
     .card {
-        padding: 12px !important;
-    }
-
-    .stats-card {
-        padding: 10px !important;
-    }
-
-    .stat-num {
-        font-size: 1.1rem !important;
-    }
-
-    .level-card {
-        padding: 1rem;
+        padding: 24px !important;
+        flex: 1;
+        /* 卡片自适应拉伸 */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .level-card h3 {
-        font-size: 0.85rem;
-        margin-bottom: 5px;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
     }
 
     #levelValue {
-        font-size: 2rem !important;
+        font-size: 3rem !important;
     }
 
     .level-badge {
@@ -976,67 +977,119 @@ textarea {
         margin-top: 8px;
     }
 
-    /* 约球页浓缩 */
+    /* 约球页扩充 */
     .match-part {
         display: flex;
         flex-direction: column;
         height: 100%;
+        justify-content: space-between;
     }
 
     .status-card {
-        margin-bottom: 8px !important;
-        padding: 10px !important;
+        margin-bottom: 15px !important;
+        padding: 20px !important;
+        flex: 0 0 auto !important;
     }
 
     .status-header h3 {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         margin: 0;
     }
 
     .action-tag {
-        padding: 8px !important;
-        font-size: 0.75rem !important;
+        padding: 12px !important;
+        font-size: 0.85rem !important;
     }
 
     .match-list {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 6px !important;
+        justify-content: space-around;
+        gap: 12px !important;
     }
 
     .match-card {
-        padding: 8px !important;
-        margin-bottom: 0;
+        padding: 20px !important;
+        flex: 1;
+        display: flex;
+        align-items: center;
     }
 
     .match-info h4 {
-        font-size: 0.85rem !important;
+        font-size: 1.1rem !important;
     }
 
     .match-badge-mini {
-        font-size: 0.6rem !important;
-        padding: 1px 4px !important;
+        font-size: 0.75rem !important;
+        padding: 2px 8px !important;
     }
 
-    .avatar {
-        width: 40px !important;
-        height: 40px !important;
+    /* 找场页扩充 */
+    .courts-part {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
     }
 
-    /* 找场页浓缩 */
     .map-card {
-        height: 150px !important;
-        /* 进一步压缩地图以适配 iPhone 16 Pro */
-        margin-bottom: 6px;
+        height: 320px !important;
+        /* iPhone 16 Pro 屏幕足够长，可以给地图更多空间 */
+        margin-bottom: 15px;
+        flex-shrink: 0;
     }
 
     .court-item {
-        padding: 8px !important;
-        gap: 8px !important;
+        padding: 22px !important;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        margin-bottom: 0 !important;
+        border-bottom: 1px solid var(--glass-border);
     }
 
     .court-info h4 {
-        font-size: 0.85rem !important;
+        font-size: 1.1rem !important;
+    }
+
+    /* 个人中心扩充 */
+    #profile {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding-bottom: 20px;
+    }
+
+    .profile-header {
+        margin-bottom: 0;
+        padding: 30px 0;
+        flex-shrink: 0;
+    }
+
+    .profile-avatar {
+        width: 110px !important;
+        height: 110px !important;
+        font-size: 3.5rem !important;
+    }
+
+    .share-btn {
+        margin: 25px 0;
+        padding: 20px !important;
+        font-size: 1rem !important;
+    }
+
+    .profile-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .settings-list li {
+        padding: 25px 20px !important;
+        /* 大幅拉开间距以填充纵向空间 */
     }
 
     /* 改进空闲时间设置交互 */
